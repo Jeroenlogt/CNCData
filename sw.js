@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snijdata-v1';
+const CACHE_NAME = 'CNC Data 0.03';
 const ASSETS = [
   '/',
   '/index.html',
