@@ -4,1140 +4,1305 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#e94560">
+  <meta name="theme-color" content="#1565c0">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
   <title>SnijData Pro</title>
   <style>
     :root {
-      --bg-primary: #0f0f1a;
-      --bg-secondary: #1a1a2e;
-      --bg-card: #16213e;
-      --accent: #e94560;
-      --accent-hover: #ff6b81;
-      --text-primary: #eee;
-      --text-secondary: #8892b0;
-      --text-muted: #5a6380;
-      --success: #00d2d3;
-      --warning: #feca57;
-      --border: #2a2a4a;
-      --radius: 12px;
+      --bg:       #f0f4f8;
+      --surface:  #ffffff;
+      --surface2: #f5f7fa;
+      --accent:   #1565c0;
+      --accent2:  #1976d2;
+      --accent-lt:#e3eeff;
+      --text:     #1a2333;
+      --text2:    #4a5568;
+      --text3:    #9aabb8;
+      --border:   #dde4ed;
+      --ok:       #16a34a;
+      --warn:     #d97706;
+      --danger:   #dc2626;
+      --radius:   12px;
+      --shadow:   0 2px 10px rgba(0,0,0,.08);
     }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* TOPBAR */
+    .topbar{background:var(--accent);padding:14px 18px;display:flex;
+      align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;
+      box-shadow:0 2px 8px rgba(21,101,192,.3);}
+    .topbar h1{font-size:19px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+    .topbar-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px;}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      min-height: 100dvh;
-      overflow-x: hidden;
-    }
+    /* NAV */
+    .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);}
+    .nav-btn{flex:1;padding:11px 6px 9px;text-align:center;font-size:11px;font-weight:600;
+      color:var(--text3);background:none;border:none;border-bottom:3px solid transparent;
+      cursor:pointer;transition:.2s;white-space:nowrap;}
+    .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+    .nav-icon{font-size:17px;display:block;margin-bottom:3px;}
 
-    /* ===== TOP BAR ===== */
-    .topbar {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .topbar h1 {
-      font-size: 20px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .topbar-subtitle {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    .menu-btn {
-      background: none;
-      border: none;
-      color: var(--text-primary);
-      font-size: 24px;
-      cursor: pointer;
-      padding: 4px;
-    }
+    /* PAGES */
+    .page{display:none;padding:16px;padding-bottom:90px;max-width:640px;margin:0 auto;}
+    .page.active{display:block;}
 
-    /* ===== NAVIGATION TABS ===== */
-    .nav-tabs {
-      display: flex;
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .nav-tab {
-      flex: 1;
-      min-width: fit-content;
-      padding: 12px 16px;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .nav-tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-    .nav-tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+    /* CARDS */
+    .card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);
+      box-shadow:var(--shadow);margin-bottom:14px;}
+    .card-head{padding:14px 18px 10px;border-bottom:1px solid var(--border);}
+    .card-title{font-size:14px;font-weight:700;color:var(--accent);}
+    .card-body{padding:16px 18px;}
 
-    /* ===== PAGES ===== */
-    .page { display: none; padding: 16px; padding-bottom: 100px; }
-    .page.active { display: block; }
+    /* WIZARD PROGRESS */
+    .wiz-progress{display:flex;align-items:center;padding:14px 18px;background:var(--surface);
+      border-bottom:1px solid var(--border);gap:0;overflow-x:auto;}
+    .wiz-step{display:flex;flex-direction:column;align-items:center;min-width:44px;flex:1;}
+    .wiz-dot{width:28px;height:28px;border-radius:50%;background:var(--border);
+      display:flex;align-items:center;justify-content:center;font-size:12px;
+      font-weight:700;color:var(--text3);transition:.3s;position:relative;z-index:1;}
+    .wiz-dot.done{background:var(--ok);color:#fff;}
+    .wiz-dot.active{background:var(--accent);color:#fff;box-shadow:0 0 0 3px var(--accent-lt);}
+    .wiz-label{font-size:9px;color:var(--text3);margin-top:4px;white-space:nowrap;}
+    .wiz-label.active{color:var(--accent);font-weight:700;}
+    .wiz-line{flex:1;height:2px;background:var(--border);margin-top:-18px;position:relative;z-index:0;}
+    .wiz-line.done{background:var(--ok);}
 
-    /* ===== SEARCH SECTION ===== */
-    .search-container {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
-      border: 1px solid var(--border);
-    }
-    .search-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .search-input-wrap {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .search-input-wrap input {
-      flex: 1;
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 16px;
-      color: var(--text-primary);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-input-wrap input:focus { border-color: var(--accent); }
-    .search-input-wrap input::placeholder { color: var(--text-muted); }
-    .btn-search {
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    .btn-search:hover { background: var(--accent-hover); }
+    /* STEP PANELS */
+    .step-panel{display:none;animation:fadeUp .25s ease;}
+    .step-panel.active{display:block;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ===== MATERIAL SELECTOR ===== */
-    .material-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    .material-btn {
-      background: var(--bg-primary);
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-secondary);
-    }
-    .material-btn.selected {
-      border-color: var(--accent);
-      background: rgba(233, 69, 96, 0.1);
-      color: var(--text-primary);
-    }
-    .material-btn:hover { border-color: var(--accent); }
-    .material-icon { font-size: 22px; display: block; margin-bottom: 4px; }
-    .material-name { font-size: 11px; font-weight: 600; }
-    .material-iso { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+    .step-title{font-size:17px;font-weight:700;margin-bottom:6px;}
+    .step-sub{font-size:13px;color:var(--text2);margin-bottom:18px;}
 
-    /* ===== RESULTS ===== */
-    .results-section { margin-top: 16px; }
-    .result-card {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .result-header {
-      background: linear-gradient(135deg, var(--accent), #c23152);
-      padding: 16px 20px;
-    }
-    .result-tool-name {
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-    }
-    .result-tool-info {
-      font-size: 12px;
-      color: rgba(255,255,255,0.8);
-      margin-top: 4px;
-    }
-    .result-data {
-      padding: 16px;
-    }
-    .data-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .data-row:last-child { border-bottom: none; }
-    .data-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-    .data-value {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--success);
-    }
-    .data-unit {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
+    /* OPERATION / BRAND SELECTION */
+    .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+    .choice-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);
+      padding:20px 12px;text-align:center;cursor:pointer;transition:.2s;}
+    .choice-card:hover{border-color:var(--accent2);background:var(--accent-lt);}
+    .choice-card.selected{border-color:var(--accent);background:var(--accent-lt);}
+    .choice-icon{font-size:32px;display:block;margin-bottom:8px;}
+    .choice-name{font-size:14px;font-weight:700;}
+    .choice-desc{font-size:11px;color:var(--text2);margin-top:3px;}
 
-    /* ===== CALCULATOR PAGE ===== */
-    .calc-card {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 20px;
-      border: 1px solid var(--border);
-      margin-bottom: 16px;
-    }
-    .calc-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: var(--accent);
-    }
-    .calc-row {
-      margin-bottom: 14px;
-    }
-    .calc-row label {
-      display: block;
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    .calc-row input, .calc-row select {
-      width: 100%;
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 15px;
-      color: var(--text-primary);
-      outline: none;
-    }
-    .calc-row input:focus, .calc-row select:focus {
-      border-color: var(--accent);
-    }
-    .calc-result-box {
-      background: var(--bg-primary);
-      border-radius: 8px;
-      padding: 16px;
-      text-align: center;
-      margin-top: 16px;
-      border: 1px solid var(--border);
-    }
-    .calc-result-label { font-size: 12px; color: var(--text-secondary); }
-    .calc-result-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--success);
-      margin: 4px 0;
-    }
-    .calc-result-unit { font-size: 14px; color: var(--text-muted); }
+    /* DRILL TYPE SELECTION — point geometry cards */
+    .drill-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+    .drill-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);
+      padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;}
+    .drill-card:hover{border-color:var(--accent2);background:var(--accent-lt);}
+    .drill-card.selected{border-color:var(--accent);background:var(--accent-lt);}
+    .drill-svg{display:block;margin:0 auto 10px;width:80px;height:96px;}
+    .drill-name{font-size:13px;font-weight:700;line-height:1.3;}
+    .drill-series{font-size:10px;color:var(--accent);font-weight:700;margin-top:2px;}
+    .drill-features{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px;}
+    .feat-badge{background:var(--accent-lt);color:var(--accent);font-size:9px;
+      font-weight:700;padding:2px 6px;border-radius:20px;}
 
-    /* ===== SETTINGS PAGE ===== */
-    .settings-group {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-    .settings-group-title {
-      padding: 14px 20px;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      background: var(--bg-secondary);
-    }
-    .settings-item {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .settings-item:last-child { border-bottom: none; }
-    .settings-item-label { font-size: 14px; }
-    .settings-item-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-    .settings-input {
-      background: var(--bg-primary);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 13px;
-      color: var(--text-primary);
-      width: 200px;
-      text-align: right;
-      outline: none;
-    }
-    .settings-input:focus { border-color: var(--accent); }
+    /* DIAMETER INPUT */
+    .diam-input{width:100%;font-size:28px;font-weight:700;text-align:center;
+      border:2px solid var(--border);border-radius:var(--radius);padding:14px;
+      outline:none;color:var(--text);background:var(--surface);}
+    .diam-input:focus{border-color:var(--accent);}
+    .diam-presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+    .diam-preset{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+      padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;}
+    .diam-preset:hover{border-color:var(--accent);background:var(--accent-lt);color:var(--accent);}
 
-    /* ===== STATUS INDICATORS ===== */
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .status-online {
-      background: rgba(0, 210, 211, 0.15);
-      color: var(--success);
-    }
-    .status-offline {
-      background: rgba(233, 69, 96, 0.15);
-      color: var(--accent);
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: currentColor;
-    }
+    /* MATERIAL GRID */
+    .mat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .mat-btn{background:var(--surface);border:2px solid var(--border);border-radius:10px;
+      padding:12px 6px;text-align:center;cursor:pointer;transition:.2s;}
+    .mat-btn:hover{border-color:var(--accent2);}
+    .mat-btn.selected{border-color:var(--accent);background:var(--accent-lt);}
+    .mat-dot{width:18px;height:18px;border-radius:50%;margin:0 auto 5px;}
+    .mat-name{font-size:11px;font-weight:700;}
+    .mat-iso{font-size:9px;color:var(--text3);margin-top:1px;}
 
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-    }
-    .empty-icon { font-size: 48px; margin-bottom: 16px; }
-    .empty-title { font-size: 18px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
-    .empty-desc { font-size: 14px; line-height: 1.5; }
+    /* RESULTS */
+    .result-header{background:linear-gradient(135deg,var(--accent),#1976d2);
+      border-radius:var(--radius) var(--radius) 0 0;padding:16px 18px;}
+    .result-tool-name{font-size:17px;font-weight:800;color:#fff;}
+    .result-info{font-size:12px;color:rgba(255,255,255,.8);margin-top:3px;}
+    .result-body{padding:4px 0;}
+    .data-row{display:flex;justify-content:space-between;align-items:center;
+      padding:13px 18px;border-bottom:1px solid var(--border);}
+    .data-row:last-child{border-bottom:none;}
+    .data-lbl{font-size:13px;color:var(--text2);}
+    .data-val{font-size:20px;font-weight:800;color:var(--accent);}
+    .data-unit{font-size:12px;font-weight:400;color:var(--text3);}
+    .highlight-val{color:var(--ok);}
+    .coolant-val{font-size:13px;font-weight:700;color:var(--text);}
 
-    /* ===== HISTORY LIST ===== */
-    .history-item {
-      background: var(--bg-card);
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-bottom: 8px;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    .history-item:hover { border-color: var(--accent); }
-    .history-item-title { font-size: 14px; font-weight: 600; }
-    .history-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    /* BACK/NEXT BUTTONS */
+    .btn-row{display:flex;gap:10px;margin-top:16px;}
+    .btn{padding:13px 22px;border-radius:var(--radius);border:none;font-size:14px;
+      font-weight:700;cursor:pointer;transition:.2s;flex:1;}
+    .btn-primary{background:var(--accent);color:#fff;}
+    .btn-primary:hover{background:var(--accent2);}
+    .btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text2);}
+    .btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+    .btn-lg{font-size:15px;padding:15px;}
 
-    /* ===== ANIMATIONS ===== */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { animation: fadeIn 0.3s ease; }
+    /* CALCULATOR */
+    .calc-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+    .calc-tab{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+      padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--text2);transition:.2s;}
+    .calc-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+    .calc-section{display:none;}
+    .calc-section.active{display:block;}
+    .calc-row{margin-bottom:12px;}
+    .calc-row label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:5px;}
+    .calc-row input,.calc-row select{width:100%;border:1px solid var(--border);border-radius:8px;
+      padding:10px 13px;font-size:15px;color:var(--text);background:var(--surface);outline:none;}
+    .calc-row input:focus,.calc-row select:focus{border-color:var(--accent);}
+    .calc-result{background:var(--accent-lt);border-radius:var(--radius);padding:16px;
+      text-align:center;margin-top:14px;border:1px solid var(--border);}
+    .calc-result-lbl{font-size:12px;color:var(--text2);}
+    .calc-result-val{font-size:34px;font-weight:800;color:var(--accent);margin:4px 0;}
+    .calc-result-unit{font-size:13px;color:var(--text3);}
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    .loading { animation: pulse 1.5s infinite; color: var(--text-muted); text-align: center; padding: 40px; }
+    /* TRIANGLE */
+    .tri-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+    .tri-input-group{text-align:center;}
+    .tri-input-group label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;}
+    .tri-input-group input{width:100%;border:1px solid var(--border);border-radius:8px;
+      padding:9px 6px;font-size:14px;text-align:center;outline:none;background:var(--surface);}
+    .tri-input-group input:focus{border-color:var(--accent);}
+    .tri-input-group input.solved{background:var(--accent-lt);border-color:var(--accent);}
+    .tri-formula{background:var(--surface2);border-radius:var(--radius);padding:14px;
+      margin-top:12px;font-size:12px;color:var(--text2);line-height:1.7;
+      border:1px solid var(--border);}
+    .tri-formula strong{color:var(--accent);}
+    .tri-visual{display:flex;justify-content:center;margin:10px 0;}
 
-    /* ===== RESPONSIVE ===== */
-    @media (min-width: 600px) {
-      .material-grid { grid-template-columns: repeat(4, 1fr); }
-      .page { max-width: 600px; margin: 0 auto; }
-    }
+    /* HISTORY */
+    .hist-item{background:var(--surface);border-radius:var(--radius);
+      border:1px solid var(--border);padding:13px 16px;margin-bottom:8px;cursor:pointer;transition:.2s;}
+    .hist-item:hover{border-color:var(--accent);}
+    .hist-title{font-size:14px;font-weight:700;}
+    .hist-sub{font-size:11px;color:var(--text3);margin-top:3px;}
+
+    /* SETTINGS */
+    .settings-group{background:var(--surface);border-radius:var(--radius);
+      border:1px solid var(--border);margin-bottom:14px;overflow:hidden;}
+    .settings-group-title{padding:10px 16px;font-size:11px;font-weight:800;
+      text-transform:uppercase;letter-spacing:.6px;color:var(--text3);background:var(--surface2);}
+    .settings-row{padding:13px 16px;border-bottom:1px solid var(--border);
+      display:flex;justify-content:space-between;align-items:center;}
+    .settings-row:last-child{border-bottom:none;}
+    .settings-lbl{font-size:13px;font-weight:600;}
+    .settings-desc{font-size:11px;color:var(--text3);margin-top:2px;}
+    .settings-input{border:1px solid var(--border);border-radius:6px;padding:6px 10px;
+      font-size:13px;width:190px;text-align:right;outline:none;background:var(--surface);}
+    .settings-input:focus{border-color:var(--accent);}
+
+    /* EMPTY STATE */
+    .empty{text-align:center;padding:50px 20px;color:var(--text3);}
+    .empty-icon{font-size:44px;margin-bottom:12px;}
+    .empty-title{font-size:17px;font-weight:700;color:var(--text2);margin-bottom:6px;}
+    .empty-desc{font-size:13px;line-height:1.6;}
+
+    /* MISC */
+    .badge-pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+    .badge-ok{background:#dcfce7;color:var(--ok);}
+    .badge-warn{background:#fef9c3;color:var(--warn);}
+    .divider{height:1px;background:var(--border);margin:8px 0;}
   </style>
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div>
-      <h1>SnijData Pro</h1>
-      <div class="topbar-subtitle">Snijgegevens opzoeken</div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div>
+    <h1>SnijData Pro</h1>
+    <div class="topbar-sub">CNC snijgegevens opzoeken</div>
+  </div>
+  <span class="badge-pill badge-warn" id="apiStatus">Demo</span>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" data-page="wizard">
+    <span class="nav-icon">🔍</span>Snijdata
+  </button>
+  <button class="nav-btn" data-page="calculator">
+    <span class="nav-icon">📐</span>Calculator
+  </button>
+  <button class="nav-btn" data-page="history">
+    <span class="nav-icon">🕐</span>Geschiedenis
+  </button>
+  <button class="nav-btn" data-page="settings">
+    <span class="nav-icon">⚙</span>Instellingen
+  </button>
+</nav>
+
+<!-- ===== PAGE: SNIJDATA WIZARD ===== -->
+<div class="page active" id="page-wizard">
+
+  <!-- Progress bar -->
+  <div class="wiz-progress" id="wizProgress">
+    <div class="wiz-step">
+      <div class="wiz-dot active" id="wdot-1">1</div>
+      <div class="wiz-label active" id="wlbl-1">Bewerking</div>
     </div>
-    <div id="apiStatus" class="status-badge status-offline">
-      <span class="status-dot"></span>
-      <span>Demo</span>
+    <div class="wiz-line" id="wline-1"></div>
+    <div class="wiz-step">
+      <div class="wiz-dot" id="wdot-2">2</div>
+      <div class="wiz-label" id="wlbl-2">Merk</div>
+    </div>
+    <div class="wiz-line" id="wline-2"></div>
+    <div class="wiz-step">
+      <div class="wiz-dot" id="wdot-3">3</div>
+      <div class="wiz-label" id="wlbl-3">Boortype</div>
+    </div>
+    <div class="wiz-line" id="wline-3"></div>
+    <div class="wiz-step">
+      <div class="wiz-dot" id="wdot-4">4</div>
+      <div class="wiz-label" id="wlbl-4">Diameter</div>
+    </div>
+    <div class="wiz-line" id="wline-4"></div>
+    <div class="wiz-step">
+      <div class="wiz-dot" id="wdot-5">5</div>
+      <div class="wiz-label" id="wlbl-5">Materiaal</div>
+    </div>
+    <div class="wiz-line" id="wline-5"></div>
+    <div class="wiz-step">
+      <div class="wiz-dot" id="wdot-6">6</div>
+      <div class="wiz-label" id="wlbl-6">Resultaat</div>
     </div>
   </div>
 
-  <!-- NAVIGATION -->
-  <nav class="nav-tabs">
-    <button class="nav-tab active" data-page="search">
-      <span class="nav-tab-icon">&#128269;</span>Zoeken
-    </button>
-    <button class="nav-tab" data-page="calculator">
-      <span class="nav-tab-icon">&#128290;</span>Calculator
-    </button>
-    <button class="nav-tab" data-page="history">
-      <span class="nav-tab-icon">&#128337;</span>Geschiedenis
-    </button>
-    <button class="nav-tab" data-page="settings">
-      <span class="nav-tab-icon">&#9881;</span>Instellingen
-    </button>
-  </nav>
-
-  <!-- ===== PAGE: ZOEKEN ===== -->
-  <div class="page active" id="page-search">
-
-    <!-- Search Input -->
-    <div class="search-container fade-in">
-      <div class="search-label">Gereedschap zoeken</div>
-      <div class="search-input-wrap">
-        <input type="text" id="toolSearch" placeholder="Artikelnummer invoeren..." autocomplete="off">
-        <button class="btn-search" onclick="searchTool()">Zoek</button>
-      </div>
-
-      <div class="search-label" style="margin-top:8px">Materiaal selecteren</div>
-      <div class="material-grid">
-        <div class="material-btn selected" data-material="P" onclick="selectMaterial(this)">
-          <span class="material-icon" style="color:#2196F3">&#9632;</span>
-          <div class="material-name">Staal</div>
-          <div class="material-iso">ISO P</div>
+  <!-- STEP 1: Bewerking -->
+  <div class="step-panel active" id="step-1">
+    <div class="card">
+      <div class="card-head"><div class="card-title">Stap 1 — Kies bewerking</div></div>
+      <div class="card-body">
+        <div class="choice-grid">
+          <div class="choice-card" data-op="drill" onclick="selectOp('drill',this)">
+            <span class="choice-icon">🔩</span>
+            <div class="choice-name">Boren</div>
+            <div class="choice-desc">VHM boren, diepgatboren</div>
+          </div>
+          <div class="choice-card" data-op="mill" onclick="selectOp('mill',this)">
+            <span class="choice-icon">⚙️</span>
+            <div class="choice-name">Frezen</div>
+            <div class="choice-desc">Vlak-, schacht-, kopieerfrezen</div>
+          </div>
         </div>
-        <div class="material-btn" data-material="M" onclick="selectMaterial(this)">
-          <span class="material-icon" style="color:#FFEB3B">&#9632;</span>
-          <div class="material-name">RVS</div>
-          <div class="material-iso">ISO M</div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-lg" onclick="goStep(2)" id="btn-step1" disabled>Volgende →</button>
         </div>
-        <div class="material-btn" data-material="K" onclick="selectMaterial(this)">
-          <span class="material-icon" style="color:#F44336">&#9632;</span>
-          <div class="material-name">Gietijzer</div>
-          <div class="material-iso">ISO K</div>
-        </div>
-        <div class="material-btn" data-material="N" onclick="selectMaterial(this)">
-          <span class="material-icon" style="color:#4CAF50">&#9632;</span>
-          <div class="material-name">Aluminium</div>
-          <div class="material-iso">ISO N</div>
-        </div>
-        <div class="material-btn" data-material="S" onclick="selectMaterial(this)">
-          <span class="material-icon" style="color:#FF9800">&#9632;</span>
-          <div class="material-name">Superleger.</div>
-          <div class="material-iso">ISO S</div>
-        </div>
-        <div class="material-btn" data-material="H" onclick="selectMaterial(this)">
-          <span class="material-icon" style="color:#9E9E9E">&#9632;</span>
-          <div class="material-name">Gehard</div>
-          <div class="material-iso">ISO H</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Results -->
-    <div id="results" class="results-section">
-      <div class="empty-state">
-        <div class="empty-icon">&#128295;</div>
-        <div class="empty-title">Voer een artikelnummer in</div>
-        <div class="empty-desc">Zoek op artikelnummer van Kennametal, Sandvik, Walter of andere fabrikanten</div>
       </div>
     </div>
   </div>
 
-  <!-- ===== PAGE: CALCULATOR ===== -->
-  <div class="page" id="page-calculator">
+  <!-- STEP 2: Merk -->
+  <div class="step-panel" id="step-2">
+    <div class="card">
+      <div class="card-head"><div class="card-title">Stap 2 — Kies fabrikant</div></div>
+      <div class="card-body">
+        <div class="choice-grid">
+          <div class="choice-card" data-brand="kennametal" onclick="selectBrand('kennametal',this)">
+            <span class="choice-icon">🇺🇸</span>
+            <div class="choice-name">Kennametal</div>
+            <div class="choice-desc">Beyond™ VHM-serie</div>
+          </div>
+          <div class="choice-card" style="opacity:.45;cursor:default;" title="Binnenkort beschikbaar">
+            <span class="choice-icon">🇸🇪</span>
+            <div class="choice-name">Sandvik</div>
+            <div class="choice-desc">Binnenkort</div>
+          </div>
+          <div class="choice-card" style="opacity:.45;cursor:default;" title="Binnenkort beschikbaar">
+            <span class="choice-icon">🇩🇪</span>
+            <div class="choice-name">Walter</div>
+            <div class="choice-desc">Binnenkort</div>
+          </div>
+          <div class="choice-card" style="opacity:.45;cursor:default;" title="Binnenkort beschikbaar">
+            <span class="choice-icon">🇩🇪</span>
+            <div class="choice-name">Gühring</div>
+            <div class="choice-desc">Binnenkort</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goStep(1)">← Terug</button>
+          <button class="btn btn-primary" onclick="goStep(3)" id="btn-step2" disabled>Volgende →</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Toerental Calculator -->
-    <div class="calc-card fade-in">
-      <div class="calc-title">Toerental berekenen (n)</div>
-      <div class="calc-row">
-        <label>Snijsnelheid Vc (m/min)</label>
-        <input type="number" id="calcVc" placeholder="bijv. 80" oninput="calcRPM()">
+  <!-- STEP 3: Boortype / Puntgeometrie -->
+  <div class="step-panel" id="step-3">
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title" id="step3-title">Stap 3 — Kies boorpuntgeometrie</div>
       </div>
-      <div class="calc-row">
-        <label>Diameter D (mm)</label>
-        <input type="number" id="calcD" placeholder="bijv. 10" oninput="calcRPM()">
+      <div class="card-body" id="step3-body">
+        <!-- Filled by JS -->
       </div>
-      <div class="calc-result-box">
-        <div class="calc-result-label">Toerental</div>
-        <div class="calc-result-value" id="rpmResult">-</div>
+    </div>
+  </div>
+
+  <!-- STEP 4: Diameter -->
+  <div class="step-panel" id="step-4">
+    <div class="card">
+      <div class="card-head"><div class="card-title">Stap 4 — Voer diameter in</div></div>
+      <div class="card-body">
+        <label style="font-size:12px;font-weight:700;color:var(--text2);display:block;margin-bottom:8px;">
+          Diameter (mm)
+        </label>
+        <input class="diam-input" type="number" id="diamInput" placeholder="bijv. 10.0"
+               min="0.5" max="50" step="0.5" oninput="onDiamInput()">
+        <div class="diam-presets">
+          <span class="diam-preset" onclick="setDiam(3)">3</span>
+          <span class="diam-preset" onclick="setDiam(4)">4</span>
+          <span class="diam-preset" onclick="setDiam(5)">5</span>
+          <span class="diam-preset" onclick="setDiam(6)">6</span>
+          <span class="diam-preset" onclick="setDiam(8)">8</span>
+          <span class="diam-preset" onclick="setDiam(10)">10</span>
+          <span class="diam-preset" onclick="setDiam(12)">12</span>
+          <span class="diam-preset" onclick="setDiam(16)">16</span>
+          <span class="diam-preset" onclick="setDiam(20)">20</span>
+          <span class="diam-preset" onclick="setDiam(25)">25</span>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goStep(3)">← Terug</button>
+          <button class="btn btn-primary" onclick="goStep(5)" id="btn-step4" disabled>Volgende →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: Materiaal -->
+  <div class="step-panel" id="step-5">
+    <div class="card">
+      <div class="card-head"><div class="card-title">Stap 5 — Kies werkstofgroep</div></div>
+      <div class="card-body">
+        <div class="mat-grid">
+          <div class="mat-btn selected" data-mat="P" onclick="selectMat('P',this)">
+            <div class="mat-dot" style="background:#2196F3"></div>
+            <div class="mat-name">Staal</div><div class="mat-iso">ISO P</div>
+          </div>
+          <div class="mat-btn" data-mat="M" onclick="selectMat('M',this)">
+            <div class="mat-dot" style="background:#FFEB3B"></div>
+            <div class="mat-name">RVS</div><div class="mat-iso">ISO M</div>
+          </div>
+          <div class="mat-btn" data-mat="K" onclick="selectMat('K',this)">
+            <div class="mat-dot" style="background:#F44336"></div>
+            <div class="mat-name">Gietijzer</div><div class="mat-iso">ISO K</div>
+          </div>
+          <div class="mat-btn" data-mat="N" onclick="selectMat('N',this)">
+            <div class="mat-dot" style="background:#4CAF50"></div>
+            <div class="mat-name">Aluminium</div><div class="mat-iso">ISO N</div>
+          </div>
+          <div class="mat-btn" data-mat="S" onclick="selectMat('S',this)">
+            <div class="mat-dot" style="background:#FF9800"></div>
+            <div class="mat-name">Superleger.</div><div class="mat-iso">ISO S</div>
+          </div>
+          <div class="mat-btn" data-mat="H" onclick="selectMat('H',this)">
+            <div class="mat-dot" style="background:#9E9E9E"></div>
+            <div class="mat-name">Gehard</div><div class="mat-iso">ISO H</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goStep(4)">← Terug</button>
+          <button class="btn btn-primary btn-lg" onclick="showResults()">Bereken resultaten →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6: Resultaat -->
+  <div class="step-panel" id="step-6">
+    <div id="result-output"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(5)">← Terug</button>
+      <button class="btn btn-primary" onclick="resetWizard()">🔄 Nieuwe berekening</button>
+    </div>
+  </div>
+
+</div><!-- end page-wizard -->
+
+
+<!-- ===== PAGE: CALCULATOR ===== -->
+<div class="page" id="page-calculator">
+  <div class="calc-tabs">
+    <button class="calc-tab active" onclick="showCalc('rpm',this)">Toerental (n)</button>
+    <button class="calc-tab" onclick="showCalc('feed',this)">Tafelvoeding (Vf)</button>
+    <button class="calc-tab" onclick="showCalc('vc',this)">Snijsnelheid (Vc)</button>
+    <button class="calc-tab" onclick="showCalc('tri',this)">Driehoek</button>
+  </div>
+
+  <!-- RPM -->
+  <div class="calc-section active card" id="calc-rpm">
+    <div class="card-head"><div class="card-title">Toerental berekenen</div></div>
+    <div class="card-body">
+      <div class="calc-row"><label>Snijsnelheid Vc (m/min)</label>
+        <input type="number" id="c_vc" placeholder="bijv. 80" oninput="calcRPM()"></div>
+      <div class="calc-row"><label>Diameter D (mm)</label>
+        <input type="number" id="c_d" placeholder="bijv. 10" oninput="calcRPM()"></div>
+      <div class="calc-result">
+        <div class="calc-result-lbl">Toerental (n)</div>
+        <div class="calc-result-val" id="r_rpm">—</div>
         <div class="calc-result-unit">omw/min</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;">n = (Vc × 1000) / (π × D)</div>
       </div>
     </div>
+  </div>
 
-    <!-- Voeding Calculator -->
-    <div class="calc-card fade-in">
-      <div class="calc-title">Tafelvoeding berekenen (Vf)</div>
-      <div class="calc-row">
-        <label>Toerental n (omw/min)</label>
-        <input type="number" id="calcN" placeholder="bijv. 2546" oninput="calcVf()">
-      </div>
-      <div class="calc-row">
-        <label>Voeding per tand fz (mm)</label>
-        <input type="number" id="calcFz" placeholder="bijv. 0.05" step="0.001" oninput="calcVf()">
-      </div>
-      <div class="calc-row">
-        <label>Aantal tanden (z)</label>
-        <input type="number" id="calcZ" placeholder="bijv. 4" oninput="calcVf()">
-      </div>
-      <div class="calc-result-box">
-        <div class="calc-result-label">Tafelvoeding</div>
-        <div class="calc-result-value" id="vfResult">-</div>
+  <!-- FEED -->
+  <div class="calc-section card" id="calc-feed">
+    <div class="card-head"><div class="card-title">Tafelvoeding berekenen</div></div>
+    <div class="card-body">
+      <div class="calc-row"><label>Toerental n (omw/min)</label>
+        <input type="number" id="c_n" placeholder="bijv. 2546" oninput="calcVf()"></div>
+      <div class="calc-row"><label>Voeding per tand / omw (mm)</label>
+        <input type="number" id="c_fz" placeholder="bijv. 0.20" step="0.001" oninput="calcVf()"></div>
+      <div class="calc-row"><label>Aantal tanden / snijkanten (z)</label>
+        <input type="number" id="c_z" placeholder="bijv. 2" oninput="calcVf()"></div>
+      <div class="calc-result">
+        <div class="calc-result-lbl">Tafelvoeding (Vf)</div>
+        <div class="calc-result-val" id="r_vf">—</div>
         <div class="calc-result-unit">mm/min</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;">Vf = n × fz × z</div>
       </div>
     </div>
+  </div>
 
-    <!-- Snijsnelheid Calculator -->
-    <div class="calc-card fade-in">
-      <div class="calc-title">Snijsnelheid berekenen (Vc)</div>
-      <div class="calc-row">
-        <label>Toerental n (omw/min)</label>
-        <input type="number" id="calcN2" placeholder="bijv. 3000" oninput="calcVc2()">
-      </div>
-      <div class="calc-row">
-        <label>Diameter D (mm)</label>
-        <input type="number" id="calcD2" placeholder="bijv. 10" oninput="calcVc2()">
-      </div>
-      <div class="calc-result-box">
-        <div class="calc-result-label">Snijsnelheid</div>
-        <div class="calc-result-value" id="vcResult">-</div>
+  <!-- VC -->
+  <div class="calc-section card" id="calc-vc">
+    <div class="card-head"><div class="card-title">Snijsnelheid berekenen</div></div>
+    <div class="card-body">
+      <div class="calc-row"><label>Toerental n (omw/min)</label>
+        <input type="number" id="c_n2" placeholder="bijv. 3000" oninput="calcVc2()"></div>
+      <div class="calc-row"><label>Diameter D (mm)</label>
+        <input type="number" id="c_d2" placeholder="bijv. 10" oninput="calcVc2()"></div>
+      <div class="calc-result">
+        <div class="calc-result-lbl">Snijsnelheid (Vc)</div>
+        <div class="calc-result-val" id="r_vc">—</div>
         <div class="calc-result-unit">m/min</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;">Vc = (π × D × n) / 1000</div>
       </div>
     </div>
   </div>
 
-  <!-- ===== PAGE: GESCHIEDENIS ===== -->
-  <div class="page" id="page-history">
-    <div id="historyList">
-      <div class="empty-state">
-        <div class="empty-icon">&#128337;</div>
-        <div class="empty-title">Nog geen zoekopdrachten</div>
-        <div class="empty-desc">Je recente zoekopdrachten verschijnen hier zodat je ze snel kunt terugvinden</div>
+  <!-- TRIANGLE -->
+  <div class="calc-section card" id="calc-tri">
+    <div class="card-head"><div class="card-title">Driehoek oplossen</div></div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">
+        Vul drie bekende waarden in (zijden in mm, hoeken in graden). De rest wordt automatisch berekend.
+      </p>
+
+      <!-- Triangle SVG diagram -->
+      <div class="tri-visual">
+        <svg viewBox="0 0 160 110" width="160" height="110">
+          <polygon points="20,90 140,90 80,15" fill="none" stroke="#1565c0" stroke-width="2"/>
+          <!-- Side labels -->
+          <text x="80" y="104" text-anchor="middle" font-size="11" fill="#1565c0" font-weight="bold">c</text>
+          <text x="42" y="55" text-anchor="middle" font-size="11" fill="#1565c0" font-weight="bold">b</text>
+          <text x="118" y="55" text-anchor="middle" font-size="11" fill="#1565c0" font-weight="bold">a</text>
+          <!-- Angle labels -->
+          <text x="14" y="90" font-size="10" fill="#dc2626" font-weight="bold">C</text>
+          <text x="138" y="90" font-size="10" fill="#dc2626" font-weight="bold">B</text>
+          <text x="76" y="12" font-size="10" fill="#dc2626" font-weight="bold">A</text>
+        </svg>
       </div>
+
+      <div style="margin-bottom:10px">
+        <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">ZIJDEN (mm)</div>
+        <div class="tri-grid">
+          <div class="tri-input-group">
+            <label>Zijde a</label>
+            <input type="number" id="t_a" placeholder="—" oninput="solveTri()" min="0" step="any">
+          </div>
+          <div class="tri-input-group">
+            <label>Zijde b</label>
+            <input type="number" id="t_b" placeholder="—" oninput="solveTri()" min="0" step="any">
+          </div>
+          <div class="tri-input-group">
+            <label>Zijde c</label>
+            <input type="number" id="t_c" placeholder="—" oninput="solveTri()" min="0" step="any">
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">HOEKEN (°)</div>
+        <div class="tri-grid">
+          <div class="tri-input-group">
+            <label>Hoek A</label>
+            <input type="number" id="t_A" placeholder="—" oninput="solveTri()" min="0" max="180" step="any">
+          </div>
+          <div class="tri-input-group">
+            <label>Hoek B</label>
+            <input type="number" id="t_B" placeholder="—" oninput="solveTri()" min="0" max="180" step="any">
+          </div>
+          <div class="tri-input-group">
+            <label>Hoek C</label>
+            <input type="number" id="t_C" placeholder="—" oninput="solveTri()" min="0" max="180" step="any">
+          </div>
+        </div>
+      </div>
+
+      <div id="tri-result" class="tri-formula" style="display:none"></div>
+
+      <button class="btn btn-secondary" style="margin-top:10px;width:100%;font-size:13px;"
+              onclick="clearTri()">Wis alles</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== PAGE: GESCHIEDENIS ===== -->
+<div class="page" id="page-history">
+  <div id="historyList">
+    <div class="empty">
+      <div class="empty-icon">🕐</div>
+      <div class="empty-title">Nog geen zoekopdrachten</div>
+      <div class="empty-desc">Je recente berekeningen verschijnen hier.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== PAGE: INSTELLINGEN ===== -->
+<div class="page" id="page-settings">
+  <div class="settings-group">
+    <div class="settings-group-title">Kennametal API</div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-lbl">API Token</div>
+        <div class="settings-desc">BASIC token van apiportal.kennametal.com</div>
+      </div>
+      <input type="password" class="settings-input" id="apiKeyKmt" placeholder="token..." onchange="saveSettings()">
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-lbl">Backend Proxy URL</div>
+        <div class="settings-desc">Voor live snijdata via eigen server</div>
+      </div>
+      <input type="url" class="settings-input" id="backendProxy" placeholder="https://..." onchange="saveSettings()">
     </div>
   </div>
 
-  <!-- ===== PAGE: INSTELLINGEN ===== -->
-  <div class="page" id="page-settings">
-    <div class="settings-group fade-in">
-      <div class="settings-group-title">Kennametal API</div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">API Token</div>
-          <div class="settings-item-desc">BASIC token van apiportal.kennametal.com</div>
-        </div>
-        <input type="password" class="settings-input" id="apiKeyKennametal" placeholder="BASIC token..." onchange="saveSettings()">
+  <div class="settings-group">
+    <div class="settings-group-title">Sandvik / Walter / Gühring (binnenkort)</div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-lbl">Sandvik CoroPlus</div>
+        <div class="settings-desc">Binnenkort beschikbaar</div>
       </div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">Backend Proxy URL</div>
-          <div class="settings-item-desc">Voor live Feeds &amp; Speeds (optioneel)</div>
-        </div>
-        <input type="url" class="settings-input" id="backendProxy" placeholder="https://jouw-server.vercel.app" onchange="saveSettings()">
-      </div>
+      <input type="password" class="settings-input" disabled placeholder="Binnenkort...">
     </div>
+  </div>
 
-    <div class="settings-group">
-      <div class="settings-group-title">Andere fabrikanten</div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">Sandvik CoroPlus Key</div>
-          <div class="settings-item-desc">Verkrijgbaar via sandvik.coromant.com</div>
-        </div>
-        <input type="password" class="settings-input" id="apiKeySandvik" placeholder="API key..." onchange="saveSettings()">
-      </div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">Walter API Key</div>
-          <div class="settings-item-desc">Verkrijgbaar via walter-tools.com</div>
-        </div>
-        <input type="password" class="settings-input" id="apiKeyWalter" placeholder="API key..." onchange="saveSettings()">
-      </div>
-    </div>
-
-    <div class="settings-group">
-      <div class="settings-group-title">Voorkeuren</div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">Standaard materiaal</div>
-        </div>
-        <select class="settings-input" id="defaultMaterial" onchange="saveSettings()">
-          <option value="P">Staal (ISO P)</option>
-          <option value="M">RVS (ISO M)</option>
-          <option value="K">Gietijzer (ISO K)</option>
-          <option value="N">Aluminium (ISO N)</option>
-          <option value="S">Superlegeringen (ISO S)</option>
-          <option value="H">Gehard staal (ISO H)</option>
-        </select>
-      </div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">Eenheden</div>
-        </div>
-        <select class="settings-input" id="unitSystem" onchange="saveSettings()">
-          <option value="metric">Metrisch (mm, m/min)</option>
-          <option value="inch">Inch (in, ft/min)</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="settings-group">
-      <div class="settings-group-title">Database beheer</div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">Gereedschappen in database</div>
-          <div class="settings-item-desc" id="dbCount">-</div>
-        </div>
-      </div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">Database exporteren/importeren</div>
-          <div class="settings-item-desc">Deel je database met collega's</div>
-        </div>
-        <div style="display:flex;gap:6px">
-          <button class="btn-search" style="padding:6px 12px;font-size:12px" onclick="exportDB()">Export</button>
-          <button class="btn-search" style="padding:6px 12px;font-size:12px;background:var(--success)" onclick="document.getElementById('importFile').click()">Import</button>
-          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importDB(event)">
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-group">
-      <div class="settings-group-title">Over</div>
-      <div class="settings-item">
-        <div>
-          <div class="settings-item-label">SnijData Pro v2.0</div>
-          <div class="settings-item-desc">Snijgegevens opzoeken voor CNC-verspaning<br>Kennametal API + lokale database</div>
-        </div>
+  <div class="settings-group">
+    <div class="settings-group-title">Over</div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-lbl">SnijData Pro v0.5</div>
+        <div class="settings-desc">Wizard-gebaseerde snijgegevens voor CNC-verspaning</div>
       </div>
     </div>
   </div>
+</div>
 
 <script>
-// ===== STATE =====
-let selectedMaterial = 'P';
-let searchHistory = [];
-let userDB = {}; // User-added tools (persisted via IndexedDB)
-
-// ===== KENNAMETAL API CONFIG =====
-const KMT_API = {
-  searchUrl: 'https://services.kennametal.com/products/search',
-  dimensionUrl: 'https://services.kennametal.com/singlesource/getDimensionDataByMaterialMasterNumber',
-  classificationUrl: 'https://services.kennametal.com/singlesource/getClasificationDataByMaterialMasterNumber',
-  productInfoUrl: 'https://services.kennametal.com/singlesource/getProductInformation',
-  // Kennametal website Feeds & Speeds (needs backend proxy due to CORS)
-  speedfeedUrl: '/store/us/en/kmt/workshop/solutions/solution/speedfeed'
-};
-
-// ===== BUILT-IN DATABASE =====
-// Based on official Kennametal, Sandvik, and Walter catalog data
-const demoDB = {
-  // Kennametal VHM Boren
-  'B041A10500CPG': {
-    name: 'Kennametal B041A VHM Boor',
-    brand: 'Kennametal',
-    type: 'VHM Boor',
-    diameter: 10.5,
-    coating: 'KCU25',
-    teeth: 2,
-    data: {
-      P: { vc: 80, f: 0.22, coolant: 'Inwendig 40 bar' },
-      M: { vc: 50, f: 0.16, coolant: 'Inwendig 40 bar' },
-      K: { vc: 70, f: 0.28, coolant: 'Inwendig 30 bar' },
-      N: { vc: 180, f: 0.30, coolant: 'Emulsie / MMS' },
-      S: { vc: 25, f: 0.10, coolant: 'Inwendig 50 bar' },
-      H: { vc: 40, f: 0.12, coolant: 'Inwendig 50 bar' }
-    }
-  },
-  'B041A08000CPG': {
-    name: 'Kennametal B041A VHM Boor',
-    brand: 'Kennametal',
-    type: 'VHM Boor',
-    diameter: 8.0,
-    coating: 'KCU25',
-    teeth: 2,
-    data: {
-      P: { vc: 85, f: 0.18, coolant: 'Inwendig 40 bar' },
-      M: { vc: 55, f: 0.14, coolant: 'Inwendig 40 bar' },
-      K: { vc: 75, f: 0.24, coolant: 'Inwendig 30 bar' },
-      N: { vc: 190, f: 0.26, coolant: 'Emulsie / MMS' },
-      S: { vc: 28, f: 0.08, coolant: 'Inwendig 50 bar' },
-      H: { vc: 42, f: 0.10, coolant: 'Inwendig 50 bar' }
-    }
-  },
-  // Sandvik CoroDrill 860
-  '860.1-0800-024A1-PM': {
-    name: 'Sandvik CoroDrill 860.1-PM',
-    brand: 'Sandvik Coromant',
-    type: 'VHM Boor',
-    diameter: 8.0,
-    coating: 'PVD TiAlN',
-    teeth: 2,
-    data: {
-      P: { vc: 100, f: 0.20, coolant: 'Inwendig 40 bar' },
-      M: { vc: 60, f: 0.14, coolant: 'Inwendig 50 bar' },
-      K: { vc: 85, f: 0.26, coolant: 'Inwendig 30 bar' },
-      N: { vc: 200, f: 0.28, coolant: 'Emulsie' },
-      S: { vc: 30, f: 0.08, coolant: 'Inwendig 60 bar' },
-      H: { vc: 45, f: 0.10, coolant: 'Inwendig 60 bar' }
-    }
-  },
-  '860.1-1050-031A1-PM': {
-    name: 'Sandvik CoroDrill 860.1-PM',
-    brand: 'Sandvik Coromant',
-    type: 'VHM Boor',
-    diameter: 10.5,
-    coating: 'PVD TiAlN',
-    teeth: 2,
-    data: {
-      P: { vc: 95, f: 0.24, coolant: 'Inwendig 40 bar' },
-      M: { vc: 58, f: 0.18, coolant: 'Inwendig 50 bar' },
-      K: { vc: 80, f: 0.30, coolant: 'Inwendig 30 bar' },
-      N: { vc: 195, f: 0.32, coolant: 'Emulsie' },
-      S: { vc: 28, f: 0.10, coolant: 'Inwendig 60 bar' },
-      H: { vc: 42, f: 0.12, coolant: 'Inwendig 60 bar' }
-    }
-  },
-  // Walter VHM Boor
-  'DC150-03-08.000A1-WJ30RE': {
-    name: 'Walter DC150 VHM Boor',
-    brand: 'Walter',
-    type: 'VHM Boor',
-    diameter: 8.0,
-    coating: 'WJ30RE',
-    teeth: 2,
-    data: {
-      P: { vc: 90, f: 0.19, coolant: 'Inwendig 40 bar' },
-      M: { vc: 55, f: 0.14, coolant: 'Inwendig 50 bar' },
-      K: { vc: 80, f: 0.25, coolant: 'Inwendig 30 bar' },
-      N: { vc: 185, f: 0.27, coolant: 'Emulsie' },
-      S: { vc: 26, f: 0.08, coolant: 'Inwendig 60 bar' },
-      H: { vc: 38, f: 0.10, coolant: 'Inwendig 60 bar' }
-    }
-  },
-  // Kennametal VHM Frees (voor later)
-  'F3AA1200AWL': {
-    name: 'Kennametal F3AA VHM Frees',
-    brand: 'Kennametal',
-    type: 'VHM Frees',
-    diameter: 12.0,
-    coating: 'KCPM15',
-    teeth: 3,
-    data: {
-      P: { vc: 120, fz: 0.06, ap: 18.0, ae: 3.6, coolant: 'Emulsie / Lucht' },
-      M: { vc: 70, fz: 0.04, ap: 15.0, ae: 3.0, coolant: 'Emulsie' },
-      K: { vc: 100, fz: 0.07, ap: 18.0, ae: 4.0, coolant: 'Droog / Lucht' },
-      N: { vc: 250, fz: 0.08, ap: 18.0, ae: 4.5, coolant: 'Emulsie / MMS' },
-      S: { vc: 35, fz: 0.03, ap: 10.0, ae: 2.0, coolant: 'Emulsie hogedruk' },
-      H: { vc: 60, fz: 0.03, ap: 8.0, ae: 1.5, coolant: 'Emulsie hogedruk' }
-    }
-  }
-};
-
-// ===== NAVIGATION =====
-document.querySelectorAll('.nav-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+// =============================================================
+//  NAVIGATIE
+// =============================================================
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('page-' + tab.dataset.page).classList.add('active');
+    btn.classList.add('active');
+    document.getElementById('page-' + btn.dataset.page).classList.add('active');
   });
 });
 
-// ===== MATERIAL SELECTION =====
-function selectMaterial(el) {
-  document.querySelectorAll('.material-btn').forEach(b => b.classList.remove('selected'));
+// =============================================================
+//  WIZARD STATE
+// =============================================================
+let wiz = { step: 1, op: null, brand: null, drillType: null, diam: null, mat: 'P' };
+
+// =============================================================
+//  ██████████████████████████████████████████████████████████
+//  MERKEN DATABASE
+//  ██████████████████████████████████████████████████████████
+//
+//  Structuur: elke tak = 1 fabrikant.
+//  Voeg later eenvoudig SANDVIK, WALTER, etc. toe als aparte objecten.
+// =============================================================
+
+// ────────────────────────────────────────────────────────────
+//  KENNAMETAL
+// ────────────────────────────────────────────────────────────
+const KENNAMETAL = {
+  name: 'Kennametal',
+
+  // ── KENTIP FS INSERT GEOMETRIEËN ───────────────────────────
+  // Bron: kennametal.com/KenTIP-FS — zijaanzicht puntprofiel
+  drills: [
+    {
+      id: 'GTP',
+      name: 'GTP — Universeel (GOdrill™)',
+      series: 'KenTIP FS GTP',
+      description: 'GOdrill™ punt, uitstekend centreren, voor staal / RVS / gietijzer. Met doorstroomkoeling.',
+      features: ['140° GOdrill™', 'Universeel', 'Doorstroomkoeling', 'KCK15A'],
+      coolantThrough: true,
+      pointAngle: 140,
+      // SVG: gouden kleur, gebogen snijkanten (GOdrill S-curve), koelgat zichtbaar
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="20" stroke="#fcd34d" stroke-width="1"/>
+        <line x1="14" y1="34" x2="66" y2="34" stroke="#fcd34d" stroke-width="1"/>
+        <line x1="14" y1="48" x2="66" y2="48" stroke="#fcd34d" stroke-width="1"/>
+        <!-- Koelgat in midden body -->
+        <circle cx="40" cy="30" r="5" fill="#d97706" opacity=".4"/>
+        <circle cx="40" cy="30" r="2.5" fill="#fef9c3"/>
+        <!-- GOdrill S-curve snijkanten: gebogen naar punt -->
+        <path d="M14,60 Q18,72 40,82" stroke="#d97706" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M66,60 Q62,72 40,82" stroke="#d97706" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M14,60 Q18,72 40,82 Q62,72 66,60 Z" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+        <!-- Zelfcentrerend punt — geen beitel zichtbaar -->
+        <circle cx="40" cy="82" r="2" fill="#d97706"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#d97706" font-weight="bold">140° GOdrill™</text>
+      </svg>`,
+      data: {
+        P: { vc:  95, fF: 0.022, coolant: 'Inwendig 40 bar' },
+        M: { vc:  60, fF: 0.016, coolant: 'Inwendig 50 bar' },
+        K: { vc:  85, fF: 0.026, coolant: 'Inwendig 30 bar' },
+        N: { vc: 200, fF: 0.030, coolant: 'Inwendig 30 bar / MMS' },
+        S: { vc:  28, fF: 0.011, coolant: 'Inwendig 60 bar' },
+        H: { vc:  42, fF: 0.012, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'HPG',
+      name: 'HPG — Staal',
+      series: 'KenTIP FS HPG',
+      description: 'HPG-punt voor staal. Uitstekend centreren, ook zonder voorcentreren in diepe gaten.',
+      features: ['Staal geoptimaliseerd', 'Scherp centreren', 'AlTiN PVD', 'KCK15A'],
+      coolantThrough: true,
+      pointAngle: 140,
+      // SVG: blauw, rechte scherpe snijkanten, duidelijk centreerpunt
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="28" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="44" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="56" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="28" cy="35" r="3.5" fill="#1e40af" opacity=".4"/>
+        <circle cx="52" cy="35" r="3.5" fill="#1e40af" opacity=".4"/>
+        <circle cx="28" cy="35" r="1.8" fill="#eff6ff"/>
+        <circle cx="52" cy="35" r="1.8" fill="#eff6ff"/>
+        <!-- Rechte scherpe snijkanten (HPG = goede centreermogelijkheid) -->
+        <polygon points="14,60 40,84 66,60" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="14" y1="60" x2="40" y2="84" stroke="#1e40af" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="66" y1="60" x2="40" y2="84" stroke="#1e40af" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Scherp centreerpunt -->
+        <circle cx="40" cy="84" r="2.5" fill="#dc2626"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#1e40af" font-weight="bold">140° staalgeometrie</text>
+      </svg>`,
+      data: {
+        P: { vc: 105, fF: 0.023, coolant: 'Inwendig 40 bar' },
+        M: { vc:  55, fF: 0.015, coolant: 'Inwendig 50 bar' },
+        K: { vc:  75, fF: 0.024, coolant: 'Inwendig 30 bar' },
+        N: { vc: 210, fF: 0.030, coolant: 'Inwendig 30 bar' },
+        S: { vc:  25, fF: 0.010, coolant: 'Inwendig 60 bar' },
+        H: { vc:  40, fF: 0.012, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'HPC',
+      name: 'HPC — Gietijzer',
+      series: 'KenTIP FS HPC',
+      description: 'HPC-punt voor alle gietijzersoorten. 4-geleideranden, grote hoekradius vermindert uittreedbraam.',
+      features: ['Gietijzer', '4 geleideranden', 'Hoekradius', 'KC7410 AlCr PVD'],
+      coolantThrough: true,
+      pointAngle: 140,
+      // SVG: rood accent (ISO K), V-punt met duidelijke hoekradius aan buitenkant
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#fce7f3" stroke="#9d174d" stroke-width="1.5"/>
+        <!-- 4 geleideranden (margin lands) als lijnen -->
+        <line x1="22" y1="4" x2="22" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="32" y1="4" x2="32" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="48" y1="4" x2="48" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="58" y1="4" x2="58" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <!-- Koelgaten -->
+        <circle cx="29" cy="35" r="3.5" fill="#9d174d" opacity=".4"/>
+        <circle cx="51" cy="35" r="3.5" fill="#9d174d" opacity=".4"/>
+        <circle cx="29" cy="35" r="1.8" fill="#fdf2f8"/>
+        <circle cx="51" cy="35" r="1.8" fill="#fdf2f8"/>
+        <!-- V-punt met HOEKRADIUS aan buitenhoeken (groot kenmerk HPC) -->
+        <path d="M14,60 Q14,70 20,75 L40,84 L60,75 Q66,70 66,60 Z"
+              fill="#fce7f3" stroke="#9d174d" stroke-width="1.5"/>
+        <!-- Hoekradius indicators -->
+        <circle cx="19" cy="68" r="7" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="61" cy="68" r="7" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="40" cy="84" r="2" fill="#9d174d"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#9d174d" font-weight="bold">Hoekradius · 4 rand.</text>
+      </svg>`,
+      data: {
+        P: { vc:  80, fF: 0.020, coolant: 'Inwendig 30 bar' },
+        M: { vc:  50, fF: 0.014, coolant: 'Inwendig 40 bar' },
+        K: { vc: 110, fF: 0.030, coolant: 'Droog / inwendig 30 bar' },
+        N: { vc: 190, fF: 0.028, coolant: 'MMS / droog' },
+        S: { vc:  22, fF: 0.009, coolant: 'Inwendig 60 bar' },
+        H: { vc:  38, fF: 0.011, coolant: 'Inwendig 50 bar' }
+      }
+    },
+    {
+      id: 'HPL',
+      name: 'HPL — Roestvrij staal (RVS)',
+      series: 'KenTIP FS HPL',
+      description: 'HPL-punt voor RVS. Vormt 2 spanen per snijkant voor gelijkmatige spaanafvoer en geen opbouwkant.',
+      features: ['RVS geoptimaliseerd', '2 spanen/snijkant', 'Gladde spaanstroom', 'AlTiN PVD'],
+      coolantThrough: true,
+      pointAngle: 140,
+      // SVG: geel accent (ISO M), TRAPVORMIGE snijkant (2-spaangeometrie)
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="26" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="42" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="54" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="28" cy="34" r="3.5" fill="#ca8a04" opacity=".4"/>
+        <circle cx="52" cy="34" r="3.5" fill="#ca8a04" opacity=".4"/>
+        <circle cx="28" cy="34" r="1.8" fill="#fefce8"/>
+        <circle cx="52" cy="34" r="1.8" fill="#fefce8"/>
+        <!-- HPL 2-spaangeometrie: TRAP in snijkant (kenmerkende trede) -->
+        <!-- Linker snijkant: trede halverwege -->
+        <polyline points="14,60 26,70 26,76 40,84"
+                  stroke="#ca8a04" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Rechter snijkant: gespiegeld -->
+        <polyline points="66,60 54,70 54,76 40,84"
+                  stroke="#ca8a04" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Vulling -->
+        <path d="M14,60 L26,70 L26,76 L40,84 L54,76 L54,70 L66,60 Z"
+              fill="#fefce8" stroke="#ca8a04" stroke-width="1.2"/>
+        <!-- Trede label -->
+        <text x="14" y="93" font-size="7" fill="#ca8a04" font-weight="bold">2× spaan</text>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#ca8a04" font-weight="bold">HPL trede</text>
+      </svg>`,
+      data: {
+        P: { vc:  75, fF: 0.018, coolant: 'Inwendig 40 bar' },
+        M: { vc:  65, fF: 0.015, coolant: 'Inwendig 50 bar' },
+        K: { vc:  80, fF: 0.022, coolant: 'Inwendig 30 bar' },
+        N: { vc: 170, fF: 0.026, coolant: 'Inwendig 30 bar' },
+        S: { vc:  28, fF: 0.010, coolant: 'Inwendig 60 bar' },
+        H: { vc:  38, fF: 0.011, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'FEG',
+      name: 'FEG — Vlakke bodem (180°)',
+      series: 'KenTIP FS FEG',
+      description: '180° vlakke-bodemgeometrie. Hoekafschuining vermindert braamvorming. 4 geleideranden voor rechtheid.',
+      features: ['180° vlakke bodem', 'Hoekafschuining', '4 geleideranden', 'Ook als voorboor'],
+      coolantThrough: true,
+      pointAngle: 180,
+      // SVG: groen (vlakke bodem), platte onderkant met zichtbare hoekafschuiningen
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="28" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="44" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="56" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="29" cy="34" r="3.5" fill="#15803d" opacity=".4"/>
+        <circle cx="51" cy="34" r="3.5" fill="#15803d" opacity=".4"/>
+        <circle cx="29" cy="34" r="1.8" fill="#f0fdf4"/>
+        <circle cx="51" cy="34" r="1.8" fill="#f0fdf4"/>
+        <!-- Vlakke tip (180°) met hoekafschuiningen -->
+        <path d="M14,60 L18,72 L62,72 L66,60 Z" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+        <!-- Vlakke bodem lijn -->
+        <line x1="18" y1="72" x2="62" y2="72" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+        <!-- Hoekafschuining = rode lijnen die niet loodrecht zijn -->
+        <line x1="14" y1="60" x2="18" y2="72" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="66" y1="60" x2="62" y2="72" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="40" y="82" text-anchor="middle" font-size="7.5" fill="#15803d" font-weight="bold">180°</text>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#15803d" font-weight="bold">Vlakke bodem</text>
+      </svg>`,
+      data: {
+        P: { vc:  80, fF: 0.019, coolant: 'Inwendig 40 bar' },
+        M: { vc:  50, fF: 0.014, coolant: 'Inwendig 50 bar' },
+        K: { vc:  90, fF: 0.026, coolant: 'Inwendig 30 bar' },
+        N: { vc: 170, fF: 0.028, coolant: 'Inwendig 30 bar' },
+        S: { vc:  22, fF: 0.009, coolant: 'Inwendig 60 bar' },
+        H: { vc:  38, fF: 0.010, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'SPF',
+      name: 'SPF — CFRP / Composiet',
+      series: 'KenTIP FS SPF',
+      description: 'Dubbele hoekgeometrie 128°+90° voor CFRP. Diamantcoating, voorkomt delaminatie.',
+      features: ['128°+90° dubbel', 'CFRP / composiet', 'Diamantcoating', 'Doorstroomkoeling'],
+      coolantThrough: true,
+      pointAngle: 128,
+      // SVG: donkergrijs, duidelijk DUBBELE hoek (stepped V) zichtbaar
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="26" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="42" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="54" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="29" cy="34" r="3.5" fill="#475569" opacity=".4"/>
+        <circle cx="51" cy="34" r="3.5" fill="#475569" opacity=".4"/>
+        <circle cx="29" cy="34" r="1.8" fill="#f8fafc"/>
+        <circle cx="51" cy="34" r="1.8" fill="#f8fafc"/>
+        <!-- DUBBELE HOEK: buitenste hoek 128° (flauwe helling), binnenste 90° (steile helling) -->
+        <!-- Buitenste deel 128°: van (14,60) naar tussenpunt (26,67) en (54,67) -->
+        <line x1="14" y1="60" x2="26" y2="67" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="66" y1="60" x2="54" y2="67" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Binnenste deel 90°: van tussenpunt naar spits -->
+        <line x1="26" y1="67" x2="40" y2="83" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="54" y1="67" x2="40" y2="83" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Vulling -->
+        <path d="M14,60 L26,67 L40,83 L54,67 L66,60 Z" fill="#f1f5f9" stroke="#475569" stroke-width="1.2"/>
+        <!-- Hoek labels -->
+        <text x="17" y="65" font-size="6.5" fill="#dc2626" font-weight="bold">128°</text>
+        <text x="32" y="80" font-size="6.5" fill="#1e293b" font-weight="bold">90°</text>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#475569" font-weight="bold">Dubbele hoek</text>
+      </svg>`,
+      data: {
+        P: { vc:  60, fF: 0.015, coolant: 'Inwendig 30 bar' },
+        M: { vc:  40, fF: 0.012, coolant: 'Inwendig 40 bar' },
+        K: { vc:  55, fF: 0.018, coolant: 'Inwendig 30 bar' },
+        N: { vc: 250, fF: 0.035, coolant: 'Inwendig 30 bar / MMS' },
+        S: { vc:  20, fF: 0.008, coolant: 'Inwendig 60 bar' },
+        H: { vc:  30, fF: 0.009, coolant: 'Inwendig 50 bar' }
+      }
+    }
+  ],
+
+  // ── FREZEN (placeholder voor later) ─────────────────────────
+  mills: [
+    // TODO: Kennametal frezen toevoegen
+    // { id: 'F3AA', name: '...', ... }
+  ]
+};
+
+// ────────────────────────────────────────────────────────────
+//  SANDVIK (placeholder — later uitwerken)
+// ────────────────────────────────────────────────────────────
+// const SANDVIK = {
+//   name: 'Sandvik Coromant',
+//   drills: [ /* CoroDrill 860, Delta-C, etc. */ ],
+//   mills:  [ /* CoroMill serie */ ]
+// };
+
+// ────────────────────────────────────────────────────────────
+//  WALTER (placeholder — later uitwerken)
+// ────────────────────────────────────────────────────────────
+// const WALTER = {
+//   name: 'Walter',
+//   drills: [ /* DC150, DC160, etc. */ ],
+//   mills:  [ /* M2131, etc. */ ]
+// };
+
+// ── MERK-LOOKUP MAP ─────────────────────────────────────────
+const BRAND_MAP = {
+  kennametal: KENNAMETAL,
+  // sandvik: SANDVIK,
+  // walter:  WALTER,
+};
+
+// =============================================================
+//  WIZARD LOGICA
+// =============================================================
+const MAT_NAMES = {
+  P:'Staal (ISO P)', M:'RVS (ISO M)', K:'Gietijzer (ISO K)',
+  N:'Aluminium (ISO N)', S:'Superlegeringen (ISO S)', H:'Gehard staal (ISO H)'
+};
+
+function goStep(n) {
+  if (n === 3 && wiz.brand) buildStep3();
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  wiz.step = n;
+  updateProgress();
+  document.getElementById('page-wizard').scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateProgress() {
+  for (let i = 1; i <= 6; i++) {
+    const dot  = document.getElementById('wdot-' + i);
+    const lbl  = document.getElementById('wlbl-' + i);
+    const line = document.getElementById('wline-' + i);
+    dot.classList.remove('active','done');
+    lbl.classList.remove('active');
+    if (line) line.classList.remove('done');
+    if (i < wiz.step)  { dot.classList.add('done');   if (line) line.classList.add('done'); }
+    if (i === wiz.step){ dot.classList.add('active');  lbl.classList.add('active'); }
+  }
+}
+
+function selectOp(op, el) {
+  document.querySelectorAll('#step-1 .choice-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  selectedMaterial = el.dataset.material;
+  wiz.op = op;
+  document.getElementById('btn-step1').disabled = false;
+  // Update step 3 label
+  document.getElementById('wlbl-3').textContent = op === 'drill' ? 'Boortype' : 'Freestype';
 }
 
-// ===== SEARCH =====
-async function searchTool() {
-  const query = document.getElementById('toolSearch').value.trim().toUpperCase();
-  const resultsDiv = document.getElementById('results');
-  const materialNames = { P: 'Staal', M: 'RVS', K: 'Gietijzer', N: 'Aluminium', S: 'Superlegeringen', H: 'Gehard staal' };
+function selectBrand(brand, el) {
+  document.querySelectorAll('#step-2 .choice-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  wiz.brand = brand;
+  document.getElementById('btn-step2').disabled = false;
+}
 
-  if (!query) {
-    resultsDiv.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">&#128269;</div>
-        <div class="empty-title">Voer een artikelnummer in</div>
-        <div class="empty-desc">Typ het volledige of gedeeltelijke artikelnummer</div>
-      </div>`;
+// Build step 3 content based on op + brand
+function buildStep3() {
+  const brand = BRAND_MAP[wiz.brand];
+  const items = wiz.op === 'drill' ? brand.drills : brand.mills;
+  const title = document.getElementById('step3-title');
+  const body  = document.getElementById('step3-body');
+
+  if (wiz.op === 'mill') {
+    title.textContent = 'Stap 3 — Freestype';
+    body.innerHTML = `<div class="empty" style="padding:30px 10px">
+      <div class="empty-icon">🚧</div>
+      <div class="empty-title">Binnenkort beschikbaar</div>
+      <div class="empty-desc">Freesdata voor ${brand.name} wordt later toegevoegd.</div>
+    </div>
+    <div class="btn-row"><button class="btn btn-secondary" onclick="goStep(2)">← Terug</button></div>`;
     return;
   }
 
-  // Show loading
-  resultsDiv.innerHTML = '<div class="loading">Zoeken...</div>';
+  title.textContent = 'Stap 3 — Kies boorpuntgeometrie (${brand.name})'.replace('${brand.name}', brand.name);
 
-  // 1. Search in local databases first (demo + user)
-  const allDB = {...demoDB, ...userDB};
-  const localMatches = Object.entries(allDB).filter(([key, val]) =>
-    key.toUpperCase().includes(query) || val.name.toUpperCase().includes(query)
-  );
-
-  // 2. Try Kennametal API if configured and no local results
-  const kmtToken = document.getElementById('apiKeyKennametal').value;
-  let apiResults = [];
-
-  if (kmtToken && localMatches.length === 0) {
-    try {
-      apiResults = await searchKennametalAPI(query, kmtToken);
-    } catch(e) {
-      console.log('Kennametal API error:', e);
-    }
-  }
-
-  // Combine results
-  const allMatches = [...localMatches];
-
-  // Add API results as tool entries
-  apiResults.forEach(product => {
-    const artNr = product.catalogId || product.materialId;
-    if (!allDB[artNr]) {
-      allMatches.push([artNr, product]);
-    }
+  let html = '<div class="drill-grid">';
+  items.forEach(drill => {
+    html += `<div class="drill-card" data-id="${drill.id}" onclick="selectDrill('${drill.id}',this)">
+      ${drill.svg}
+      <div class="drill-name">${drill.name}</div>
+      <div class="drill-series">${drill.series}</div>
+      <div class="drill-features">`;
+    drill.features.forEach(f => { html += `<span class="feat-badge">${f}</span>`; });
+    html += `</div>
+      <div style="font-size:10px;color:var(--text2);margin-top:6px;line-height:1.4;">${drill.description}</div>
+    </div>`;
   });
+  html += '</div>';
+  html += `<div class="btn-row">
+    <button class="btn btn-secondary" onclick="goStep(2)">← Terug</button>
+    <button class="btn btn-primary" id="btn-step3" onclick="goStep(4)" disabled>Volgende →</button>
+  </div>`;
+  body.innerHTML = html;
+}
 
-  if (allMatches.length === 0) {
-    resultsDiv.innerHTML = `
-      <div class="empty-state fade-in">
-        <div class="empty-icon">&#128533;</div>
-        <div class="empty-title">Geen resultaten</div>
-        <div class="empty-desc">Artikelnummer "${query}" niet gevonden.<br><br>
-        ${!kmtToken
-          ? 'Tip: Configureer je Kennametal API token in Instellingen om live te zoeken.'
-          : 'Probeer een ander artikelnummer.'}
-        <br><br><button class="btn-search" style="font-size:13px;padding:8px 16px" onclick="openKennametalPage('${query}')">Zoek op kennametal.com</button>
+function selectDrill(id, el) {
+  document.querySelectorAll('#step3-body .drill-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  wiz.drillType = id;
+  const btn = document.getElementById('btn-step3');
+  if (btn) btn.disabled = false;
+}
+
+function setDiam(d) {
+  document.getElementById('diamInput').value = d;
+  wiz.diam = d;
+  document.getElementById('btn-step4').disabled = false;
+}
+
+function onDiamInput() {
+  const v = parseFloat(document.getElementById('diamInput').value);
+  wiz.diam = v > 0 ? v : null;
+  document.getElementById('btn-step4').disabled = !wiz.diam;
+}
+
+function selectMat(mat, el) {
+  document.querySelectorAll('.mat-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  wiz.mat = mat;
+}
+
+function showResults() {
+  const brand  = BRAND_MAP[wiz.brand];
+  const drills = brand.drills;
+  const drill  = drills.find(d => d.id === wiz.drillType);
+  if (!drill || !wiz.diam) return;
+
+  const matData = drill.data[wiz.mat];
+  const f  = +(matData.fF * wiz.diam).toFixed(3);
+  const n  = Math.round((matData.vc * 1000) / (Math.PI * wiz.diam));
+  const vf = Math.round(n * f);
+
+  const html = `
+    <div class="card" style="overflow:hidden">
+      <div class="result-header">
+        <div class="result-tool-name">${drill.name}</div>
+        <div class="result-info">${brand.name} ${drill.series} · ⌀${wiz.diam} mm · ${MAT_NAMES[wiz.mat]}</div>
+      </div>
+      <div class="result-body">
+        <div class="data-row">
+          <span class="data-lbl">Snijsnelheid (Vc)</span>
+          <span class="data-val">${matData.vc} <span class="data-unit">m/min</span></span>
         </div>
-      </div>`;
-    return;
-  }
+        <div class="data-row">
+          <span class="data-lbl">Voeding per omw. (f)</span>
+          <span class="data-val">${f} <span class="data-unit">mm/omw</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Toerental (n)</span>
+          <span class="data-val highlight-val">${n.toLocaleString('nl-NL')} <span class="data-unit">omw/min</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Tafelvoeding (Vf)</span>
+          <span class="data-val highlight-val">${vf.toLocaleString('nl-NL')} <span class="data-unit">mm/min</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Koeling</span>
+          <span class="coolant-val">${matData.coolant}</span>
+        </div>
+      </div>
+    </div>`;
 
-  let html = '';
-  allMatches.forEach(([artNr, tool]) => {
-    const matData = tool.data ? tool.data[selectedMaterial] : null;
-    const isDrill = (tool.type || '').includes('Boor');
-    const source = tool._fromAPI ? 'API' : 'Database';
-
-    if (matData) {
-      // Calculate RPM
-      const n = Math.round((matData.vc * 1000) / (Math.PI * tool.diameter));
-      const feed = isDrill ? matData.f : matData.fz;
-      const vf = isDrill ? Math.round(n * feed) : Math.round(n * (matData.fz || 0) * tool.teeth);
-
-      html += `
-        <div class="result-card fade-in">
-          <div class="result-header">
-            <div class="result-tool-name">${tool.name}</div>
-            <div class="result-tool-info">${artNr} | ${tool.brand} | &#8960; ${tool.diameter} mm | ${tool.coating} | ${source}</div>
-          </div>
-          <div class="result-data">
-            <div class="data-row">
-              <span class="data-label">Materiaal</span>
-              <span class="data-value" style="color:var(--warning);font-size:14px">${materialNames[selectedMaterial]} (ISO ${selectedMaterial})</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Snijsnelheid (Vc)</span>
-              <span class="data-value">${matData.vc} <span class="data-unit">m/min</span></span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">${isDrill ? 'Voeding per omw. (f)' : 'Voeding per tand (fz)'}</span>
-              <span class="data-value">${isDrill ? matData.f : matData.fz} <span class="data-unit">mm${isDrill ? '/omw' : ''}</span></span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Toerental (n)</span>
-              <span class="data-value">${n.toLocaleString('nl-NL')} <span class="data-unit">omw/min</span></span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Tafelvoeding (Vf)</span>
-              <span class="data-value">${vf.toLocaleString('nl-NL')} <span class="data-unit">mm/min</span></span>
-            </div>
-            ${!isDrill && matData.ap ? `
-            <div class="data-row">
-              <span class="data-label">Snijdiepte (ap)</span>
-              <span class="data-value">${matData.ap} <span class="data-unit">mm</span></span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Snijbreedte (ae)</span>
-              <span class="data-value">${matData.ae} <span class="data-unit">mm</span></span>
-            </div>` : ''}
-            <div class="data-row">
-              <span class="data-label">Koeling</span>
-              <span class="data-value" style="font-size:14px;color:var(--text-primary)">${matData.coolant}</span>
-            </div>
-          </div>
-        </div>`;
-      addToHistory(artNr, tool.name, materialNames[selectedMaterial]);
-    } else {
-      // API result without cutting data - show product info with link
-      html += `
-        <div class="result-card fade-in">
-          <div class="result-header" style="background:linear-gradient(135deg,#2a2a4a,#16213e)">
-            <div class="result-tool-name">${tool.name || artNr}</div>
-            <div class="result-tool-info">${artNr} | ${tool.brand || 'Kennametal'} | Bron: API</div>
-          </div>
-          <div class="result-data">
-            <div class="data-row">
-              <span class="data-label">Product gevonden via API</span>
-              <span class="data-value" style="font-size:13px;color:var(--warning)">Geen snijdata in database</span>
-            </div>
-            <div class="data-row" style="justify-content:center;border:none;padding-top:8px">
-              <button class="btn-search" style="font-size:13px;padding:8px 16px" onclick="openKennametalPage('${artNr}')">Bekijk op kennametal.com</button>
-            </div>
-          </div>
-        </div>`;
-    }
-  });
-
-  resultsDiv.innerHTML = html;
+  document.getElementById('result-output').innerHTML = html;
+  goStep(6);
+  addToHistory(drill, wiz.diam, wiz.mat, n, vf);
 }
 
-// ===== KENNAMETAL SEARCH PRODUCTS API =====
-async function searchKennametalAPI(query, token) {
-  try {
-    const response = await fetch(KMT_API.searchUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'BASIC ' + token
-      },
-      body: JSON.stringify({
-        I_COMMON_INPUTS: { MAX_ROWS: '10', BRAND: 'KD', LANGUAGE: '', SALES_ORG: '', DIST_CHNL: '', DIVISION: '', SOLD_TO: '' },
-        IT_PRODUCT_SEARCH: [{ OUR_PART_NO: query, YOUR_PART_NO: '', MATERIAL_DESC: '', CATALOG_TYPE: '', CATALOG_ID: query, GRADE: '', ON_SALE_ITEM_CHECK: '' }]
-      })
-    });
-
-    if (!response.ok) throw new Error('API ' + response.status);
-    const data = await response.json();
-
-    // Parse response into tool objects
-    if (data.ET_PRODUCT_SEARCH) {
-      return data.ET_PRODUCT_SEARCH.map(p => ({
-        name: p.MATERIAL_DESC || p.CATALOG_ID || query,
-        brand: 'Kennametal',
-        materialId: p.MATERIAL_ID,
-        catalogId: p.CATALOG_ID,
-        grade: p.GRADE,
-        _fromAPI: true
-      }));
-    }
-    return [];
-  } catch(e) {
-    console.error('Kennametal API search failed:', e);
-    return [];
-  }
+function resetWizard() {
+  wiz = { step:1, op:null, brand:null, drillType:null, diam:null, mat:'P' };
+  document.getElementById('diamInput').value = '';
+  document.querySelectorAll('.mat-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector('[data-mat="P"]').classList.add('selected');
+  document.getElementById('btn-step1').disabled = true;
+  document.getElementById('btn-step2').disabled = true;
+  goStep(1);
 }
 
-// Open Kennametal product page
-function openKennametalPage(artNr) {
-  window.open('https://www.kennametal.com/us/en/site-search.html?query=' + encodeURIComponent(artNr), '_blank');
-}
+// =============================================================
+//  HISTORY
+// =============================================================
+let history = [];
 
-// ===== DATABASE EXPORT/IMPORT =====
-function exportDB() {
-  const allDB = {...demoDB, ...userDB};
-  const blob = new Blob([JSON.stringify(allDB, null, 2)], {type: 'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'snijdata-database.json';
-  a.click();
-}
-
-function importDB(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      Object.assign(userDB, imported);
-      saveUserDB();
-      updateDBCount();
-      alert('Database geimporteerd: ' + Object.keys(imported).length + ' gereedschappen');
-    } catch(err) {
-      alert('Fout bij importeren: ongeldig JSON bestand');
-    }
-  };
-  reader.readAsText(file);
-}
-
-// ===== IndexedDB for persistence =====
-function saveUserDB() {
-  try {
-    // Use IndexedDB-like approach with a simple key-value in the service worker cache
-    // For simplicity, we store in a hidden textarea (works offline)
-    const store = document.getElementById('dbStore');
-    if (store) store.value = JSON.stringify(userDB);
-  } catch(e) {}
-}
-
-function loadUserDB() {
-  try {
-    const store = document.getElementById('dbStore');
-    if (store && store.value) userDB = JSON.parse(store.value);
-  } catch(e) {}
-}
-
-function updateDBCount() {
-  const total = Object.keys(demoDB).length + Object.keys(userDB).length;
-  const el = document.getElementById('dbCount');
-  if (el) el.textContent = total + ' gereedschappen (' + Object.keys(demoDB).length + ' ingebouwd + ' + Object.keys(userDB).length + ' eigen)';
-}
-
-// Enter key support
-document.getElementById('toolSearch').addEventListener('keypress', e => {
-  if (e.key === 'Enter') searchTool();
-});
-
-// ===== HISTORY =====
-function addToHistory(artNr, name, material) {
-  const existing = searchHistory.findIndex(h => h.artNr === artNr && h.material === material);
-  if (existing > -1) searchHistory.splice(existing, 1);
-
-  searchHistory.unshift({
-    artNr, name, material,
-    time: new Date().toLocaleString('nl-NL')
-  });
-
-  if (searchHistory.length > 20) searchHistory.pop();
+function addToHistory(drill, diam, mat, n, vf) {
+  history.unshift({ drill, diam, mat, n, vf, t: new Date().toLocaleString('nl-NL') });
+  if (history.length > 30) history.pop();
   renderHistory();
 }
 
 function renderHistory() {
-  const container = document.getElementById('historyList');
-  if (searchHistory.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">&#128337;</div>
-        <div class="empty-title">Nog geen zoekopdrachten</div>
-        <div class="empty-desc">Je recente zoekopdrachten verschijnen hier</div>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = searchHistory.map(h => `
-    <div class="history-item" onclick="loadFromHistory('${h.artNr}')">
-      <div class="history-item-title">${h.name}</div>
-      <div class="history-item-sub">${h.artNr} | ${h.material} | ${h.time}</div>
-    </div>
-  `).join('');
+  const el = document.getElementById('historyList');
+  if (!history.length) return;
+  el.innerHTML = history.map((h,i) => `
+    <div class="hist-item" onclick="reloadFromHistory(${i})">
+      <div class="hist-title">${h.drill.name} · ⌀${h.diam} mm</div>
+      <div class="hist-sub">${MAT_NAMES[h.mat]} · n=${h.n.toLocaleString('nl-NL')} omw/min · Vf=${h.vf.toLocaleString('nl-NL')} mm/min · ${h.t}</div>
+    </div>`).join('');
 }
 
-function loadFromHistory(artNr) {
-  document.getElementById('toolSearch').value = artNr;
-  document.querySelectorAll('.nav-tab')[0].click();
-  searchTool();
+function reloadFromHistory(i) {
+  const h = history[i];
+  wiz.mat = h.mat;
+  document.querySelector('[data-mat="' + h.mat + '"]').click();
+  showResults();
+  document.querySelectorAll('.nav-btn')[0].click();
 }
 
-// ===== CALCULATORS =====
+// =============================================================
+//  CALCULATORS
+// =============================================================
+function showCalc(id, btn) {
+  document.querySelectorAll('.calc-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.calc-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('calc-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
 function calcRPM() {
-  const vc = parseFloat(document.getElementById('calcVc').value);
-  const d = parseFloat(document.getElementById('calcD').value);
-  const el = document.getElementById('rpmResult');
-  if (vc > 0 && d > 0) {
-    el.textContent = Math.round((vc * 1000) / (Math.PI * d)).toLocaleString('nl-NL');
-  } else {
-    el.textContent = '-';
-  }
+  const vc = parseFloat(document.getElementById('c_vc').value);
+  const d  = parseFloat(document.getElementById('c_d').value);
+  document.getElementById('r_rpm').textContent =
+    (vc > 0 && d > 0) ? Math.round((vc*1000)/(Math.PI*d)).toLocaleString('nl-NL') : '—';
 }
 
 function calcVf() {
-  const n = parseFloat(document.getElementById('calcN').value);
-  const fz = parseFloat(document.getElementById('calcFz').value);
-  const z = parseFloat(document.getElementById('calcZ').value);
-  const el = document.getElementById('vfResult');
-  if (n > 0 && fz > 0 && z > 0) {
-    el.textContent = Math.round(n * fz * z).toLocaleString('nl-NL');
-  } else {
-    el.textContent = '-';
-  }
+  const n  = parseFloat(document.getElementById('c_n').value);
+  const fz = parseFloat(document.getElementById('c_fz').value);
+  const z  = parseFloat(document.getElementById('c_z').value);
+  document.getElementById('r_vf').textContent =
+    (n > 0 && fz > 0 && z > 0) ? Math.round(n*fz*z).toLocaleString('nl-NL') : '—';
 }
 
 function calcVc2() {
-  const n = parseFloat(document.getElementById('calcN2').value);
-  const d = parseFloat(document.getElementById('calcD2').value);
-  const el = document.getElementById('vcResult');
-  if (n > 0 && d > 0) {
-    el.textContent = ((Math.PI * d * n) / 1000).toFixed(1);
-  } else {
-    el.textContent = '-';
-  }
+  const n = parseFloat(document.getElementById('c_n2').value);
+  const d = parseFloat(document.getElementById('c_d2').value);
+  document.getElementById('r_vc').textContent =
+    (n > 0 && d > 0) ? ((Math.PI*d*n)/1000).toFixed(1) : '—';
 }
 
-// ===== SETTINGS =====
-function saveSettings() {
-  const settings = {
-    kennametalKey: document.getElementById('apiKeyKennametal').value,
-    sandvikKey: document.getElementById('apiKeySandvik').value,
-    walterKey: document.getElementById('apiKeyWalter').value,
-    defaultMaterial: document.getElementById('defaultMaterial').value
+// =============================================================
+//  DRIEHOEK CALCULATOR
+// =============================================================
+const D2R = Math.PI / 180;
+const R2D = 180 / Math.PI;
+
+function getTriInputs() {
+  const get = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v)||v<=0 ? null : v; };
+  const getA = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v)||v<=0||v>=180 ? null : v; };
+  return {
+    a: get('t_a'), b: get('t_b'), c: get('t_c'),
+    A: getA('t_A'), B: getA('t_B'), C: getA('t_C')
   };
-  // In a real app, we'd save to a backend or use IndexedDB
-  // For now we track it in memory
-  updateApiStatus();
 }
 
-function updateApiStatus() {
-  const hasKey = document.getElementById('apiKeyKennametal').value ||
-                 document.getElementById('apiKeySandvik').value ||
-                 document.getElementById('apiKeyWalter').value;
-  const badge = document.getElementById('apiStatus');
-  if (hasKey) {
-    badge.className = 'status-badge status-online';
-    badge.innerHTML = '<span class="status-dot"></span><span>Live API</span>';
-  } else {
-    badge.className = 'status-badge status-offline';
-    badge.innerHTML = '<span class="status-dot"></span><span>Demo</span>';
+function setTriResult(s, formula, explanation) {
+  document.getElementById('t_a').value = s.a !== null ? round4(s.a) : '';
+  document.getElementById('t_b').value = s.b !== null ? round4(s.b) : '';
+  document.getElementById('t_c').value = s.c !== null ? round4(s.c) : '';
+  document.getElementById('t_A').value = s.A !== null ? round4(s.A) : '';
+  document.getElementById('t_B').value = s.B !== null ? round4(s.B) : '';
+  document.getElementById('t_C').value = s.C !== null ? round4(s.C) : '';
+  // Mark solved fields
+  ['t_a','t_b','t_c','t_A','t_B','t_C'].forEach(id => {
+    document.getElementById(id).classList.toggle('solved',
+      document.getElementById(id).value !== '' && !document.getElementById(id).matches(':focus'));
+  });
+  const res = document.getElementById('tri-result');
+  res.style.display = 'block';
+  res.innerHTML = `<strong>Methode:</strong> ${formula}<br><br>${explanation}`;
+}
+
+function round4(v) { return Math.round(v * 10000) / 10000; }
+
+function solveTri() {
+  let {a, b, c, A, B, C} = getTriInputs();
+  const known = [a,b,c,A,B,C].filter(v => v !== null).length;
+  if (known < 3) { document.getElementById('tri-result').style.display='none'; return; }
+
+  // Fill third angle if 2 angles known
+  if (A !== null && B !== null && C === null) { C = 180 - A - B; if (C<=0){showTriError('Hoeken tellen niet op tot 180°.');return;} }
+  if (A !== null && C !== null && B === null) { B = 180 - A - C; if (B<=0){showTriError('Hoeken tellen niet op tot 180°.');return;} }
+  if (B !== null && C !== null && A === null) { A = 180 - B - C; if (A<=0){showTriError('Hoeken tellen niet op tot 180°.');return;} }
+
+  // SSS
+  if (a && b && c && !A && !B && !C) {
+    const cosA = (b*b + c*c - a*a) / (2*b*c);
+    if (Math.abs(cosA) > 1) { showTriError('Geen geldige driehoek (cosinusregel geeft ongeldige waarde).'); return; }
+    A = Math.acos(cosA) * R2D;
+    const cosB = (a*a + c*c - b*b) / (2*a*c);
+    B = Math.acos(cosB) * R2D;
+    C = 180 - A - B;
+    setTriResult({a,b,c,A,B,C},
+      'SSS → Cosinusregel',
+      `<strong>cos A</strong> = (b² + c² − a²) / (2bc)<br>
+       <strong>cos B</strong> = (a² + c² − b²) / (2ac)<br>
+       C = 180° − A − B<br><br>
+       Alle drie de zijden zijn bekend → gebruik de cosinusregel om elke hoek te berekenen.`);
+    return;
   }
+
+  // SAS
+  if (a && b && !c && !A && !B && C) {
+    c = Math.sqrt(a*a + b*b - 2*a*b*Math.cos(C*D2R));
+    A = Math.asin(a * Math.sin(C*D2R) / c) * R2D;
+    B = 180 - A - C;
+    setTriResult({a,b,c,A,B,C},
+      'SAS → Cosinusregel',
+      `<strong>c</strong> = √(a² + b² − 2ab·cos C)<br>
+       Daarna sinusregel voor hoek A.<br><br>
+       Twee zijden en de ingesloten hoek bekend → bereken de derde zijde met de cosinusregel.`);
+    return;
+  }
+  if (a && c && !b && A && !B && !C) {
+    b = Math.sqrt(a*a + c*c - 2*a*c*Math.cos(A*D2R));
+    B = Math.asin(b*Math.sin(A*D2R)/a)*R2D; C=180-A-B;
+    setTriResult({a,b,c,A,B,C},'SAS → Cosinusregel',
+      `<strong>b</strong> = √(a² + c² − 2ac·cos A)<br>Daarna sinusregel voor resterende hoeken.`);
+    return;
+  }
+  if (b && c && !a && !A && B && !C) {
+    a = Math.sqrt(b*b + c*c - 2*b*c*Math.cos(B*D2R));
+    A = Math.asin(a*Math.sin(B*D2R)/b)*R2D; C=180-A-B;
+    setTriResult({a,b,c,A,B,C},'SAS → Cosinusregel',
+      `<strong>a</strong> = √(b² + c² − 2bc·cos B)<br>Daarna sinusregel voor resterende hoeken.`);
+    return;
+  }
+
+  // ASA / AAS — need all angles first
+  if (A && B && C) {
+    if (a && !b && !c) {
+      b = a * Math.sin(B*D2R) / Math.sin(A*D2R);
+      c = a * Math.sin(C*D2R) / Math.sin(A*D2R);
+      setTriResult({a,b,c,A,B,C},'AAS / ASA → Sinusregel',
+        `<strong>b/sin B</strong> = <strong>a/sin A</strong> → b = a·sin B / sin A<br>
+         <strong>c</strong> = a·sin C / sin A<br><br>
+         Twee hoeken en één zijde bekend → gebruik de sinusregel.`);
+      return;
+    }
+    if (!a && b && !c) {
+      a = b * Math.sin(A*D2R) / Math.sin(B*D2R);
+      c = b * Math.sin(C*D2R) / Math.sin(B*D2R);
+      setTriResult({a,b,c,A,B,C},'AAS / ASA → Sinusregel',
+        `a = b·sin A / sin B &nbsp; c = b·sin C / sin B`);
+      return;
+    }
+    if (!a && !b && c) {
+      a = c * Math.sin(A*D2R) / Math.sin(C*D2R);
+      b = c * Math.sin(B*D2R) / Math.sin(C*D2R);
+      setTriResult({a,b,c,A,B,C},'AAS / ASA → Sinusregel',
+        `a = c·sin A / sin C &nbsp; b = c·sin B / sin C`);
+      return;
+    }
+  }
+
+  // SSA (ambiguous)
+  if (a && b && A && !B && !C && !c) {
+    const sinB = b * Math.sin(A*D2R) / a;
+    if (sinB > 1) { showTriError('Geen geldige driehoek met deze waarden (ambiguous SSA geval).'); return; }
+    B = Math.asin(sinB) * R2D;
+    C = 180 - A - B;
+    c = a * Math.sin(C*D2R) / Math.sin(A*D2R);
+    setTriResult({a,b,c,A,B,C},'SSA → Sinusregel (let op: mogelijk 2 oplossingen)',
+      `<strong>sin B</strong> = b·sin A / a<br>
+       C = 180° − A − B<br>
+       c = a·sin C / sin A<br><br>
+       ⚠️ SSA kan twee oplossingen hebben. Controleer of B' = 180° − B ook geldig is.`);
+    return;
+  }
+
+  document.getElementById('tri-result').style.display = 'none';
 }
 
-// ===== INIT =====
-function init() {
-  loadUserDB();
-  updateDBCount();
-  updateApiStatus();
+function showTriError(msg) {
+  const res = document.getElementById('tri-result');
+  res.style.display = 'block';
+  res.innerHTML = `<span style="color:var(--danger)">⚠ ${msg}</span>`;
 }
 
-// ===== SERVICE WORKER REGISTRATION =====
+function clearTri() {
+  ['t_a','t_b','t_c','t_A','t_B','t_C'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.classList.remove('solved');
+  });
+  document.getElementById('tri-result').style.display = 'none';
+}
+
+// =============================================================
+//  SETTINGS
+// =============================================================
+function saveSettings() {
+  const hasKey = document.getElementById('apiKeyKmt').value;
+  document.getElementById('apiStatus').textContent = hasKey ? 'Live API' : 'Demo';
+  document.getElementById('apiStatus').className = 'badge-pill ' + (hasKey ? 'badge-ok' : 'badge-warn');
+}
+
+// =============================================================
+//  SERVICE WORKER
+// =============================================================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
-
-// Run on load
-init();
 </script>
-<!-- Hidden store for user database persistence -->
-<textarea id="dbStore" style="display:none"></textarea>
 </body>
 </html>
