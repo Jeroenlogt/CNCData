@@ -643,176 +643,238 @@ let wiz = { step: 1, op: null, brand: null, drillType: null, diam: null, mat: 'P
 const KENNAMETAL = {
   name: 'Kennametal',
 
-  // ── VHM BOREN ──────────────────────────────────────────────
+  // ── KENTIP FS INSERT GEOMETRIEËN ───────────────────────────
+  // Bron: kennametal.com/KenTIP-FS — zijaanzicht puntprofiel
   drills: [
     {
-      id: 'B041A',
-      name: 'Standaard VHM boor',
-      series: 'B041A',
-      description: 'Universeel inzetbaar, 4-vlaks punt zonder doorstroomkoeling.',
-      features: ['140° punt', '4-vlaks', 'KCU25'],
-      coolantThrough: false,
-      pointAngle: 140,
-      // SVG — zijaanzicht puntgeometrie
-      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
-        <!-- Body -->
-        <rect x="14" y="4" width="52" height="62" rx="3" fill="#cfe2ff" stroke="#1565c0" stroke-width="1.5"/>
-        <!-- Flute lines (schematic spirals) -->
-        <line x1="14" y1="18" x2="66" y2="28" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <line x1="14" y1="34" x2="66" y2="44" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <line x1="14" y1="50" x2="66" y2="58" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <!-- Tip 140° — flat V -->
-        <polygon points="14,66 40,82 66,66" fill="#cfe2ff" stroke="#1565c0" stroke-width="1.5"/>
-        <!-- Chisel edge at tip -->
-        <line x1="36" y1="79" x2="44" y2="79" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Point angle label -->
-        <text x="40" y="92" text-anchor="middle" font-size="8" fill="#1565c0" font-weight="bold">140°</text>
-      </svg>`,
-      // Feed = fFactor × diameter (mm/omw) — gebaseerd op Kennametal catalogus
-      data: {
-        P: { vc:  80, fF: 0.020, coolant: 'Emulsie uitwendig' },
-        M: { vc:  50, fF: 0.015, coolant: 'Emulsie uitwendig' },
-        K: { vc:  70, fF: 0.025, coolant: 'Emulsie / droog' },
-        N: { vc: 180, fF: 0.028, coolant: 'Emulsie / MMS' },
-        S: { vc:  25, fF: 0.010, coolant: 'Emulsie hogedruk' },
-        H: { vc:  40, fF: 0.012, coolant: 'Emulsie hogedruk' }
-      }
-    },
-    {
-      id: 'B051A',
-      name: 'VHM boor doorstroomkoeling',
-      series: 'B051A',
-      description: 'Inwendige koelkanalen voor hogere snelheden en diepboringen.',
-      features: ['140° punt', '4-vlaks', 'Koeling 40–80 bar'],
+      id: 'GTP',
+      name: 'GTP — Universeel (GOdrill™)',
+      series: 'KenTIP FS GTP',
+      description: 'GOdrill™ punt, uitstekend centreren, voor staal / RVS / gietijzer. Met doorstroomkoeling.',
+      features: ['140° GOdrill™', 'Universeel', 'Doorstroomkoeling', 'KCK15A'],
       coolantThrough: true,
       pointAngle: 140,
+      // SVG: gouden kleur, gebogen snijkanten (GOdrill S-curve), koelgat zichtbaar
       svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
-        <!-- Body -->
-        <rect x="14" y="4" width="52" height="62" rx="3" fill="#cfe2ff" stroke="#1565c0" stroke-width="1.5"/>
-        <!-- Flute lines -->
-        <line x1="14" y1="18" x2="66" y2="28" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <line x1="14" y1="34" x2="66" y2="44" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <line x1="14" y1="50" x2="66" y2="58" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <!-- Coolant holes (2 blauwe cirkels in body) -->
-        <circle cx="29" cy="38" r="4" fill="#1565c0" opacity=".7"/>
-        <circle cx="51" cy="38" r="4" fill="#1565c0" opacity=".7"/>
-        <circle cx="29" cy="38" r="2" fill="#e0f2fe"/>
-        <circle cx="51" cy="38" r="2" fill="#e0f2fe"/>
-        <!-- Tip 140° -->
-        <polygon points="14,66 40,82 66,66" fill="#cfe2ff" stroke="#1565c0" stroke-width="1.5"/>
-        <!-- Coolant exits at tip -->
-        <circle cx="30" cy="72" r="2.5" fill="#1565c0" opacity=".6"/>
-        <circle cx="50" cy="72" r="2.5" fill="#1565c0" opacity=".6"/>
-        <!-- Chisel -->
-        <line x1="36" y1="79" x2="44" y2="79" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
-        <text x="40" y="92" text-anchor="middle" font-size="8" fill="#1565c0" font-weight="bold">140° + koeling</text>
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="20" stroke="#fcd34d" stroke-width="1"/>
+        <line x1="14" y1="34" x2="66" y2="34" stroke="#fcd34d" stroke-width="1"/>
+        <line x1="14" y1="48" x2="66" y2="48" stroke="#fcd34d" stroke-width="1"/>
+        <!-- Koelgat in midden body -->
+        <circle cx="40" cy="30" r="5" fill="#d97706" opacity=".4"/>
+        <circle cx="40" cy="30" r="2.5" fill="#fef9c3"/>
+        <!-- GOdrill S-curve snijkanten: gebogen naar punt -->
+        <path d="M14,60 Q18,72 40,82" stroke="#d97706" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M66,60 Q62,72 40,82" stroke="#d97706" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M14,60 Q18,72 40,82 Q62,72 66,60 Z" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+        <!-- Zelfcentrerend punt — geen beitel zichtbaar -->
+        <circle cx="40" cy="82" r="2" fill="#d97706"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#d97706" font-weight="bold">140° GOdrill™</text>
       </svg>`,
       data: {
-        P: { vc:  90, fF: 0.022, coolant: 'Inwendig 40 bar' },
+        P: { vc:  95, fF: 0.022, coolant: 'Inwendig 40 bar' },
         M: { vc:  60, fF: 0.016, coolant: 'Inwendig 50 bar' },
-        K: { vc:  80, fF: 0.026, coolant: 'Inwendig 30 bar' },
+        K: { vc:  85, fF: 0.026, coolant: 'Inwendig 30 bar' },
         N: { vc: 200, fF: 0.030, coolant: 'Inwendig 30 bar / MMS' },
-        S: { vc:  30, fF: 0.011, coolant: 'Inwendig 60 bar' },
-        H: { vc:  45, fF: 0.013, coolant: 'Inwendig 60 bar' }
+        S: { vc:  28, fF: 0.011, coolant: 'Inwendig 60 bar' },
+        H: { vc:  42, fF: 0.012, coolant: 'Inwendig 60 bar' }
       }
     },
     {
-      id: 'HPX',
-      name: 'HPX — Hoge prestatie staal',
-      series: 'HPX',
-      description: 'Rechte snijkant, lage snijkrachten, hoog volume staalbewerking.',
-      features: ['140° punt', 'Rechte snijkant', 'KCU40'],
-      coolantThrough: false,
+      id: 'HPG',
+      name: 'HPG — Staal',
+      series: 'KenTIP FS HPG',
+      description: 'HPG-punt voor staal. Uitstekend centreren, ook zonder voorcentreren in diepe gaten.',
+      features: ['Staal geoptimaliseerd', 'Scherp centreren', 'AlTiN PVD', 'KCK15A'],
+      coolantThrough: true,
       pointAngle: 140,
+      // SVG: blauw, rechte scherpe snijkanten, duidelijk centreerpunt
       svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
-        <!-- Body -->
-        <rect x="14" y="4" width="52" height="62" rx="3" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
-        <!-- Wider flutes (parabolisch) -->
-        <path d="M14,18 Q40,22 66,18" stroke="#93c5fd" stroke-width="1.5" fill="none"/>
-        <path d="M14,36 Q40,40 66,36" stroke="#93c5fd" stroke-width="1.5" fill="none"/>
-        <path d="M14,54 Q40,58 66,54" stroke="#93c5fd" stroke-width="1.5" fill="none"/>
-        <!-- Tip 140° — flat -->
-        <polygon points="14,66 40,82 66,66" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
-        <!-- Straight cutting edge highlight -->
-        <line x1="14" y1="66" x2="40" y2="82" stroke="#1e40af" stroke-width="2.5"/>
-        <line x1="66" y1="66" x2="40" y2="82" stroke="#1e40af" stroke-width="2.5"/>
-        <!-- NO chisel (web thinned) — S-shape suggestion -->
-        <path d="M35,77 Q40,75 45,79" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <text x="40" y="92" text-anchor="middle" font-size="8" fill="#1e40af" font-weight="bold">140° rechte snijkant</text>
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="28" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="44" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="56" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="28" cy="35" r="3.5" fill="#1e40af" opacity=".4"/>
+        <circle cx="52" cy="35" r="3.5" fill="#1e40af" opacity=".4"/>
+        <circle cx="28" cy="35" r="1.8" fill="#eff6ff"/>
+        <circle cx="52" cy="35" r="1.8" fill="#eff6ff"/>
+        <!-- Rechte scherpe snijkanten (HPG = goede centreermogelijkheid) -->
+        <polygon points="14,60 40,84 66,60" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="14" y1="60" x2="40" y2="84" stroke="#1e40af" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="66" y1="60" x2="40" y2="84" stroke="#1e40af" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Scherp centreerpunt -->
+        <circle cx="40" cy="84" r="2.5" fill="#dc2626"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#1e40af" font-weight="bold">140° staalgeometrie</text>
       </svg>`,
       data: {
-        P: { vc: 110, fF: 0.022, coolant: 'Emulsie uitwendig' },
-        M: { vc:  65, fF: 0.016, coolant: 'Emulsie uitwendig' },
-        K: { vc: 100, fF: 0.028, coolant: 'Droog / lucht' },
-        N: { vc: 270, fF: 0.032, coolant: 'MMS / droog' },
-        S: { vc:  35, fF: 0.011, coolant: 'Emulsie hogedruk' },
-        H: { vc:  55, fF: 0.013, coolant: 'Emulsie hogedruk' }
+        P: { vc: 105, fF: 0.023, coolant: 'Inwendig 40 bar' },
+        M: { vc:  55, fF: 0.015, coolant: 'Inwendig 50 bar' },
+        K: { vc:  75, fF: 0.024, coolant: 'Inwendig 30 bar' },
+        N: { vc: 210, fF: 0.030, coolant: 'Inwendig 30 bar' },
+        S: { vc:  25, fF: 0.010, coolant: 'Inwendig 60 bar' },
+        H: { vc:  40, fF: 0.012, coolant: 'Inwendig 60 bar' }
       }
     },
     {
-      id: 'B201A',
-      name: 'Lange uitvoering (5×D)',
-      series: 'B201A',
-      description: 'Parabolische spaangroef voor diepboringen tot 5× diameter.',
-      features: ['140° punt', 'Parabolisch', '5×D', 'KCU25'],
-      coolantThrough: false,
+      id: 'HPC',
+      name: 'HPC — Gietijzer',
+      series: 'KenTIP FS HPC',
+      description: 'HPC-punt voor alle gietijzersoorten. 4-geleideranden, grote hoekradius vermindert uittreedbraam.',
+      features: ['Gietijzer', '4 geleideranden', 'Hoekradius', 'KC7410 AlCr PVD'],
+      coolantThrough: true,
       pointAngle: 140,
+      // SVG: rood accent (ISO K), V-punt met duidelijke hoekradius aan buitenkant
       svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
-        <!-- Longer body -->
-        <rect x="22" y="2" width="36" height="72" rx="3" fill="#e0f2fe" stroke="#0277bd" stroke-width="1.5"/>
-        <!-- Parabolic flute cross-section indicator -->
-        <path d="M22,20 Q40,27 58,20" stroke="#7dd3fc" stroke-width="1.5" fill="none"/>
-        <path d="M22,38 Q40,45 58,38" stroke="#7dd3fc" stroke-width="1.5" fill="none"/>
-        <path d="M22,56 Q40,63 58,56" stroke="#7dd3fc" stroke-width="1.5" fill="none"/>
-        <!-- Tip 140° — narrower because narrower body -->
-        <polygon points="22,74 40,86 58,74" fill="#e0f2fe" stroke="#0277bd" stroke-width="1.5"/>
-        <!-- Chisel -->
-        <line x1="37" y1="83" x2="43" y2="83" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Depth indicator arrow -->
-        <line x1="64" y1="2" x2="64" y2="72" stroke="#0277bd" stroke-width="1" stroke-dasharray="2,2"/>
-        <text x="72" y="38" font-size="8" fill="#0277bd" font-weight="bold" writing-mode="vertical-lr">5×D</text>
-        <text x="40" y="94" text-anchor="middle" font-size="8" fill="#0277bd" font-weight="bold">140° lang</text>
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#fce7f3" stroke="#9d174d" stroke-width="1.5"/>
+        <!-- 4 geleideranden (margin lands) als lijnen -->
+        <line x1="22" y1="4" x2="22" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="32" y1="4" x2="32" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="48" y1="4" x2="48" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="58" y1="4" x2="58" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <!-- Koelgaten -->
+        <circle cx="29" cy="35" r="3.5" fill="#9d174d" opacity=".4"/>
+        <circle cx="51" cy="35" r="3.5" fill="#9d174d" opacity=".4"/>
+        <circle cx="29" cy="35" r="1.8" fill="#fdf2f8"/>
+        <circle cx="51" cy="35" r="1.8" fill="#fdf2f8"/>
+        <!-- V-punt met HOEKRADIUS aan buitenhoeken (groot kenmerk HPC) -->
+        <path d="M14,60 Q14,70 20,75 L40,84 L60,75 Q66,70 66,60 Z"
+              fill="#fce7f3" stroke="#9d174d" stroke-width="1.5"/>
+        <!-- Hoekradius indicators -->
+        <circle cx="19" cy="68" r="7" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="61" cy="68" r="7" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="40" cy="84" r="2" fill="#9d174d"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#9d174d" font-weight="bold">Hoekradius · 4 rand.</text>
       </svg>`,
       data: {
-        P: { vc:  75, fF: 0.018, coolant: 'Emulsie uitwendig' },
-        M: { vc:  45, fF: 0.013, coolant: 'Emulsie uitwendig' },
-        K: { vc:  65, fF: 0.022, coolant: 'Emulsie / droog' },
-        N: { vc: 160, fF: 0.025, coolant: 'Emulsie / MMS' },
-        S: { vc:  22, fF: 0.009, coolant: 'Emulsie hogedruk' },
-        H: { vc:  35, fF: 0.010, coolant: 'Emulsie hogedruk' }
+        P: { vc:  80, fF: 0.020, coolant: 'Inwendig 30 bar' },
+        M: { vc:  50, fF: 0.014, coolant: 'Inwendig 40 bar' },
+        K: { vc: 110, fF: 0.030, coolant: 'Droog / inwendig 30 bar' },
+        N: { vc: 190, fF: 0.028, coolant: 'MMS / droog' },
+        S: { vc:  22, fF: 0.009, coolant: 'Inwendig 60 bar' },
+        H: { vc:  38, fF: 0.011, coolant: 'Inwendig 50 bar' }
+      }
+    },
+    {
+      id: 'HPL',
+      name: 'HPL — Roestvrij staal (RVS)',
+      series: 'KenTIP FS HPL',
+      description: 'HPL-punt voor RVS. Vormt 2 spanen per snijkant voor gelijkmatige spaanafvoer en geen opbouwkant.',
+      features: ['RVS geoptimaliseerd', '2 spanen/snijkant', 'Gladde spaanstroom', 'AlTiN PVD'],
+      coolantThrough: true,
+      pointAngle: 140,
+      // SVG: geel accent (ISO M), TRAPVORMIGE snijkant (2-spaangeometrie)
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="26" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="42" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="54" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="28" cy="34" r="3.5" fill="#ca8a04" opacity=".4"/>
+        <circle cx="52" cy="34" r="3.5" fill="#ca8a04" opacity=".4"/>
+        <circle cx="28" cy="34" r="1.8" fill="#fefce8"/>
+        <circle cx="52" cy="34" r="1.8" fill="#fefce8"/>
+        <!-- HPL 2-spaangeometrie: TRAP in snijkant (kenmerkende trede) -->
+        <!-- Linker snijkant: trede halverwege -->
+        <polyline points="14,60 26,70 26,76 40,84"
+                  stroke="#ca8a04" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Rechter snijkant: gespiegeld -->
+        <polyline points="66,60 54,70 54,76 40,84"
+                  stroke="#ca8a04" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Vulling -->
+        <path d="M14,60 L26,70 L26,76 L40,84 L54,76 L54,70 L66,60 Z"
+              fill="#fefce8" stroke="#ca8a04" stroke-width="1.2"/>
+        <!-- Trede label -->
+        <text x="14" y="93" font-size="7" fill="#ca8a04" font-weight="bold">2× spaan</text>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#ca8a04" font-weight="bold">HPL trede</text>
+      </svg>`,
+      data: {
+        P: { vc:  75, fF: 0.018, coolant: 'Inwendig 40 bar' },
+        M: { vc:  65, fF: 0.015, coolant: 'Inwendig 50 bar' },
+        K: { vc:  80, fF: 0.022, coolant: 'Inwendig 30 bar' },
+        N: { vc: 170, fF: 0.026, coolant: 'Inwendig 30 bar' },
+        S: { vc:  28, fF: 0.010, coolant: 'Inwendig 60 bar' },
+        H: { vc:  38, fF: 0.011, coolant: 'Inwendig 60 bar' }
       }
     },
     {
       id: 'FEG',
-      name: 'Vlakke bodem (180°)',
-      series: 'FEG / KenTIP',
-      description: 'Vlakke puntgeometrie 180° voor gaten met vlakke bodem.',
-      features: ['180° punt', 'Vlakke bodem', 'Voorboren mogelijk'],
-      coolantThrough: false,
+      name: 'FEG — Vlakke bodem (180°)',
+      series: 'KenTIP FS FEG',
+      description: '180° vlakke-bodemgeometrie. Hoekafschuining vermindert braamvorming. 4 geleideranden voor rechtheid.',
+      features: ['180° vlakke bodem', 'Hoekafschuining', '4 geleideranden', 'Ook als voorboor'],
+      coolantThrough: true,
       pointAngle: 180,
+      // SVG: groen (vlakke bodem), platte onderkant met zichtbare hoekafschuiningen
       svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
-        <!-- Body -->
-        <rect x="14" y="4" width="52" height="62" rx="3" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
-        <!-- Flute lines -->
-        <line x1="14" y1="20" x2="66" y2="30" stroke="#86efac" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <line x1="14" y1="38" x2="66" y2="48" stroke="#86efac" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <line x1="14" y1="56" x2="66" y2="62" stroke="#86efac" stroke-width="1.5" stroke-dasharray="4,3"/>
-        <!-- Flat tip (180°) -->
-        <rect x="14" y="66" width="52" height="10" rx="1" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
-        <!-- Flat bottom indicator -->
-        <line x1="14" y1="76" x2="66" y2="76" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Corner chamfers -->
-        <line x1="14" y1="66" x2="14" y2="76" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
-        <line x1="66" y1="66" x2="66" y2="76" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
-        <text x="40" y="92" text-anchor="middle" font-size="8" fill="#15803d" font-weight="bold">180° vlakke bodem</text>
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="28" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="44" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="56" stroke="#86efac" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="29" cy="34" r="3.5" fill="#15803d" opacity=".4"/>
+        <circle cx="51" cy="34" r="3.5" fill="#15803d" opacity=".4"/>
+        <circle cx="29" cy="34" r="1.8" fill="#f0fdf4"/>
+        <circle cx="51" cy="34" r="1.8" fill="#f0fdf4"/>
+        <!-- Vlakke tip (180°) met hoekafschuiningen -->
+        <path d="M14,60 L18,72 L62,72 L66,60 Z" fill="#f0fdf4" stroke="#15803d" stroke-width="1.5"/>
+        <!-- Vlakke bodem lijn -->
+        <line x1="18" y1="72" x2="62" y2="72" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+        <!-- Hoekafschuining = rode lijnen die niet loodrecht zijn -->
+        <line x1="14" y1="60" x2="18" y2="72" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="66" y1="60" x2="62" y2="72" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="40" y="82" text-anchor="middle" font-size="7.5" fill="#15803d" font-weight="bold">180°</text>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#15803d" font-weight="bold">Vlakke bodem</text>
       </svg>`,
       data: {
-        P: { vc:  70, fF: 0.018, coolant: 'Emulsie uitwendig' },
-        M: { vc:  45, fF: 0.014, coolant: 'Emulsie uitwendig' },
-        K: { vc:  65, fF: 0.022, coolant: 'Emulsie / droog' },
-        N: { vc: 160, fF: 0.026, coolant: 'Emulsie / MMS' },
-        S: { vc:  20, fF: 0.009, coolant: 'Emulsie hogedruk' },
-        H: { vc:  35, fF: 0.010, coolant: 'Emulsie hogedruk' }
+        P: { vc:  80, fF: 0.019, coolant: 'Inwendig 40 bar' },
+        M: { vc:  50, fF: 0.014, coolant: 'Inwendig 50 bar' },
+        K: { vc:  90, fF: 0.026, coolant: 'Inwendig 30 bar' },
+        N: { vc: 170, fF: 0.028, coolant: 'Inwendig 30 bar' },
+        S: { vc:  22, fF: 0.009, coolant: 'Inwendig 60 bar' },
+        H: { vc:  38, fF: 0.010, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'SPF',
+      name: 'SPF — CFRP / Composiet',
+      series: 'KenTIP FS SPF',
+      description: 'Dubbele hoekgeometrie 128°+90° voor CFRP. Diamantcoating, voorkomt delaminatie.',
+      features: ['128°+90° dubbel', 'CFRP / composiet', 'Diamantcoating', 'Doorstroomkoeling'],
+      coolantThrough: true,
+      pointAngle: 128,
+      // SVG: donkergrijs, duidelijk DUBBELE hoek (stepped V) zichtbaar
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="4" width="52" height="56" rx="3" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+        <line x1="14" y1="20" x2="66" y2="26" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="36" x2="66" y2="42" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="14" y1="50" x2="66" y2="54" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Koelgaten -->
+        <circle cx="29" cy="34" r="3.5" fill="#475569" opacity=".4"/>
+        <circle cx="51" cy="34" r="3.5" fill="#475569" opacity=".4"/>
+        <circle cx="29" cy="34" r="1.8" fill="#f8fafc"/>
+        <circle cx="51" cy="34" r="1.8" fill="#f8fafc"/>
+        <!-- DUBBELE HOEK: buitenste hoek 128° (flauwe helling), binnenste 90° (steile helling) -->
+        <!-- Buitenste deel 128°: van (14,60) naar tussenpunt (26,67) en (54,67) -->
+        <line x1="14" y1="60" x2="26" y2="67" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="66" y1="60" x2="54" y2="67" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Binnenste deel 90°: van tussenpunt naar spits -->
+        <line x1="26" y1="67" x2="40" y2="83" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="54" y1="67" x2="40" y2="83" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Vulling -->
+        <path d="M14,60 L26,67 L40,83 L54,67 L66,60 Z" fill="#f1f5f9" stroke="#475569" stroke-width="1.2"/>
+        <!-- Hoek labels -->
+        <text x="17" y="65" font-size="6.5" fill="#dc2626" font-weight="bold">128°</text>
+        <text x="32" y="80" font-size="6.5" fill="#1e293b" font-weight="bold">90°</text>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#475569" font-weight="bold">Dubbele hoek</text>
+      </svg>`,
+      data: {
+        P: { vc:  60, fF: 0.015, coolant: 'Inwendig 30 bar' },
+        M: { vc:  40, fF: 0.012, coolant: 'Inwendig 40 bar' },
+        K: { vc:  55, fF: 0.018, coolant: 'Inwendig 30 bar' },
+        N: { vc: 250, fF: 0.035, coolant: 'Inwendig 30 bar / MMS' },
+        S: { vc:  20, fF: 0.008, coolant: 'Inwendig 60 bar' },
+        H: { vc:  30, fF: 0.009, coolant: 'Inwendig 50 bar' }
       }
     }
   ],
