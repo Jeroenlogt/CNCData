@@ -89,12 +89,19 @@
     .choice-desc{font-size:11px;color:var(--text2);margin-top:3px;}
 
     /* DRILL TYPE SELECTION — point geometry cards */
-    .drill-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+    .drill-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
     .drill-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);
       padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;}
     .drill-card:hover{border-color:var(--accent2);background:var(--accent-lt);}
     .drill-card.selected{border-color:var(--accent);background:var(--accent-lt);}
     .drill-svg{display:block;margin:0 auto 10px;width:80px;height:96px;}
+    /* Echte productfoto — zelfde formaat als SVG */
+    .drill-img{display:block;margin:0 auto 10px;width:80px;height:96px;object-fit:contain;}
+    /* Categorie-header boven een groep boorpunten */
+    .drill-cat-hdr{grid-column:1/-1;font-size:11px;font-weight:800;text-transform:uppercase;
+      letter-spacing:.6px;color:var(--text3);padding:10px 4px 4px;
+      border-top:1px solid var(--border);margin-top:4px;}
+    .drill-cat-hdr:first-child{border-top:none;margin-top:0;padding-top:0;}
     .drill-name{font-size:13px;font-weight:700;line-height:1.3;}
     .drill-series{font-size:10px;color:var(--accent);font-weight:700;margin-top:2px;}
     .drill-features{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px;}
@@ -643,11 +650,18 @@ let wiz = { step: 1, op: null, brand: null, drillType: null, diam: null, mat: 'P
 const KENNAMETAL = {
   name: 'Kennametal',
 
-  // ── KENTIP FS INSERT GEOMETRIEËN ───────────────────────────
-  // Bron: kennametal.com/KenTIP-FS — zijaanzicht puntprofiel
-  drills: [
+  // ── BOOR-CATEGORIEËN ────────────────────────────────────────
+  // Elke categorie = 1 boorlijn (KenTIP FS, KSEM, ...)
+  // imgSrc: pad naar echte productfoto — voeg jpg/png toe aan /images/
+  //         als het bestand ontbreekt laadt de SVG automatisch als fallback.
+  drillCategories: [
+  {
+    id: 'kentip-fs',
+    name: 'KenTIP FS — Modulaire inserts (8–32 mm)',
+    items: [
     {
       id: 'GTP',
+      imgSrc: 'images/kmt-kentip-gtp.jpg',
       name: 'GTP — Universeel (GOdrill™)',
       series: 'KenTIP FS GTP',
       description: 'GOdrill™ punt, uitstekend centreren, voor staal / RVS / gietijzer. Met doorstroomkoeling.',
@@ -682,6 +696,7 @@ const KENNAMETAL = {
     },
     {
       id: 'HPG',
+      imgSrc: 'images/kmt-kentip-hpg.jpg',
       name: 'HPG — Staal',
       series: 'KenTIP FS HPG',
       description: 'HPG-punt voor staal. Uitstekend centreren, ook zonder voorcentreren in diepe gaten.',
@@ -718,6 +733,7 @@ const KENNAMETAL = {
     },
     {
       id: 'HPC',
+      imgSrc: 'images/kmt-kentip-hpc.jpg',
       name: 'HPC — Gietijzer',
       series: 'KenTIP FS HPC',
       description: 'HPC-punt voor alle gietijzersoorten. 4-geleideranden, grote hoekradius vermindert uittreedbraam.',
@@ -757,6 +773,7 @@ const KENNAMETAL = {
     },
     {
       id: 'HPL',
+      imgSrc: 'images/kmt-kentip-hpl.jpg',
       name: 'HPL — Roestvrij staal (RVS)',
       series: 'KenTIP FS HPL',
       description: 'HPL-punt voor RVS. Vormt 2 spanen per snijkant voor gelijkmatige spaanafvoer en geen opbouwkant.',
@@ -799,6 +816,7 @@ const KENNAMETAL = {
     },
     {
       id: 'FEG',
+      imgSrc: 'images/kmt-kentip-feg.jpg',
       name: 'FEG — Vlakke bodem (180°)',
       series: 'KenTIP FS FEG',
       description: '180° vlakke-bodemgeometrie. Hoekafschuining vermindert braamvorming. 4 geleideranden voor rechtheid.',
@@ -837,6 +855,7 @@ const KENNAMETAL = {
     },
     {
       id: 'SPF',
+      imgSrc: 'images/kmt-kentip-spf.jpg',
       name: 'SPF — CFRP / Composiet',
       series: 'KenTIP FS SPF',
       description: 'Dubbele hoekgeometrie 128°+90° voor CFRP. Diamantcoating, voorkomt delaminatie.',
@@ -877,7 +896,203 @@ const KENNAMETAL = {
         H: { vc:  30, fF: 0.009, coolant: 'Inwendig 50 bar' }
       }
     }
-  ],
+    ] // einde KenTIP FS items
+  },
+
+  // ── KSEM INSERTS ────────────────────────────────────────────
+  {
+    id: 'ksem',
+    name: 'KSEM — Modulaire inserts (12.5–40 mm, tot 10×D)',
+    items: [
+    {
+      id: 'KSEM-HP',
+      name: 'HP — Langspanend staal',
+      series: 'KSEM HP',
+      description: 'Gebogen snijkant voor optimale spaanvorming in langspanend staal.',
+      features: ['Langspanend staal', 'Gebogen snijkant', 'KC7315 TiAlN'],
+      imgSrc: 'images/kmt-ksem-hp.jpg',
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="4" width="60" height="56" rx="3" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="10" y1="20" x2="70" y2="28" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="10" y1="36" x2="70" y2="44" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="10" y1="52" x2="70" y2="58" stroke="#93c5fd" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Gebogen snijkant (HP kenmerk — geen rechte lijn maar curve) -->
+        <path d="M10,60 Q20,70 30,76 Q35,80 40,84" stroke="#1e40af" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M70,60 Q60,70 50,76 Q45,80 40,84" stroke="#1e40af" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M10,60 Q20,70 30,76 Q35,80 40,84 Q45,80 50,76 Q60,70 70,60 Z"
+              fill="#dbeafe" stroke="#1e40af" stroke-width="1.2"/>
+        <circle cx="40" cy="84" r="2.5" fill="#1e40af"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#1e40af" font-weight="bold">Gebogen snijkant</text>
+      </svg>`,
+      data: {
+        P: { vc:  90, fF: 0.021, coolant: 'Inwendig 40 bar' },
+        M: { vc:  55, fF: 0.015, coolant: 'Inwendig 50 bar' },
+        K: { vc:  75, fF: 0.024, coolant: 'Inwendig 30 bar' },
+        N: { vc: 190, fF: 0.028, coolant: 'Inwendig 30 bar' },
+        S: { vc:  24, fF: 0.010, coolant: 'Inwendig 60 bar' },
+        H: { vc:  38, fF: 0.011, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'KSEM-HPG',
+      name: 'HPG — Kortspanend / gelegeerd staal',
+      series: 'KSEM HPG',
+      description: 'Rechte snijkant, hoge stabiliteit bij kortspanend staal en onderbroken snedes.',
+      features: ['Gelegeerd staal', 'Rechte snijkant', 'Onderbroken snede OK', 'KC7315'],
+      imgSrc: 'images/kmt-ksem-hpg.jpg',
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="4" width="60" height="56" rx="3" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+        <line x1="10" y1="20" x2="70" y2="26" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="10" y1="36" x2="70" y2="42" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="10" y1="52" x2="70" y2="56" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Kleine hoekafschuiningen aan snijkanthoeken (HPG kenmerk) -->
+        <polygon points="10,60 40,84 70,60" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+        <!-- Rechte snijkanten gemarkeerd -->
+        <line x1="10" y1="60" x2="40" y2="84" stroke="#1d4ed8" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="70" y1="60" x2="40" y2="84" stroke="#1d4ed8" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Kleine chamfer hoeken (HPG kenmerk) -->
+        <line x1="10" y1="60" x2="16" y2="64" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+        <line x1="70" y1="60" x2="64" y2="64" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="40" cy="84" r="2.5" fill="#dc2626"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#1d4ed8" font-weight="bold">Rechte snijkant</text>
+      </svg>`,
+      data: {
+        P: { vc: 100, fF: 0.022, coolant: 'Inwendig 40 bar' },
+        M: { vc:  58, fF: 0.015, coolant: 'Inwendig 50 bar' },
+        K: { vc:  78, fF: 0.025, coolant: 'Inwendig 30 bar' },
+        N: { vc: 200, fF: 0.029, coolant: 'Inwendig 30 bar' },
+        S: { vc:  26, fF: 0.010, coolant: 'Inwendig 60 bar' },
+        H: { vc:  40, fF: 0.012, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'KSEM-HPC',
+      name: 'HPC — Gietijzer (grijs / laagsterk nodulair)',
+      series: 'KSEM HPC',
+      description: '4 geleideranden + grote hoekradius voorkomt uittreedbraam bij gietijzer.',
+      features: ['Gietijzer ISO K', '4 geleideranden', 'Grote hoekradius', 'KC7410 AlCr PVD'],
+      imgSrc: 'images/kmt-ksem-hpc.jpg',
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="4" width="60" height="56" rx="3" fill="#fce7f3" stroke="#9d174d" stroke-width="1.5"/>
+        <line x1="19" y1="4" x2="19" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="30" y1="4" x2="30" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="50" y1="4" x2="50" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <line x1="61" y1="4" x2="61" y2="60" stroke="#f9a8d4" stroke-width="1.2"/>
+        <!-- Grote hoekradius (ronder dan HPCCL) -->
+        <path d="M10,60 Q10,78 22,82 L40,88 L58,82 Q70,78 70,60 Z"
+              fill="#fce7f3" stroke="#9d174d" stroke-width="1.5"/>
+        <circle cx="18" cy="72" r="9" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="62" cy="72" r="9" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="40" cy="88" r="2" fill="#9d174d"/>
+        <text x="40" y="95" text-anchor="middle" font-size="7.5" fill="#9d174d" font-weight="bold">Grote hoekradius</text>
+      </svg>`,
+      data: {
+        P: { vc:  78, fF: 0.019, coolant: 'Inwendig 30 bar' },
+        M: { vc:  48, fF: 0.013, coolant: 'Inwendig 40 bar' },
+        K: { vc: 115, fF: 0.032, coolant: 'Droog / inwendig 30 bar' },
+        N: { vc: 185, fF: 0.028, coolant: 'MMS / droog' },
+        S: { vc:  20, fF: 0.009, coolant: 'Inwendig 60 bar' },
+        H: { vc:  36, fF: 0.010, coolant: 'Inwendig 50 bar' }
+      }
+    },
+    {
+      id: 'KSEM-HPCCL',
+      name: 'HPCCL — Gietijzer (CGI / hoogsterk nodulair)',
+      series: 'KSEM HPCCL',
+      description: 'Hoekafschuining (geen radius) + 4 geleideranden voor zwaar gietijzer (CGI, ADI).',
+      features: ['CGI / ADI gietijzer', 'Hoekafschuining', '4 geleideranden', 'KC7410'],
+      imgSrc: 'images/kmt-ksem-hpccl.jpg',
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="4" width="60" height="56" rx="3" fill="#fdf2f8" stroke="#86198f" stroke-width="1.5"/>
+        <line x1="19" y1="4" x2="19" y2="60" stroke="#e879f9" stroke-width="1.2"/>
+        <line x1="30" y1="4" x2="30" y2="60" stroke="#e879f9" stroke-width="1.2"/>
+        <line x1="50" y1="4" x2="50" y2="60" stroke="#e879f9" stroke-width="1.2"/>
+        <line x1="61" y1="4" x2="61" y2="60" stroke="#e879f9" stroke-width="1.2"/>
+        <!-- Hoekafschuining: RECHTE schuine lijn (niet gebogen, verschil met HPC) -->
+        <path d="M10,60 L20,70 L40,84 L60,70 L70,60 Z"
+              fill="#fdf2f8" stroke="#86198f" stroke-width="1.5"/>
+        <line x1="10" y1="60" x2="20" y2="70" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="70" y1="60" x2="60" y2="70" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="40" cy="84" r="2" fill="#86198f"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#86198f" font-weight="bold">Hoekafschuining</text>
+      </svg>`,
+      data: {
+        P: { vc:  75, fF: 0.018, coolant: 'Inwendig 30 bar' },
+        M: { vc:  46, fF: 0.013, coolant: 'Inwendig 40 bar' },
+        K: { vc: 120, fF: 0.034, coolant: 'Droog / inwendig 30 bar' },
+        N: { vc: 180, fF: 0.027, coolant: 'MMS / droog' },
+        S: { vc:  20, fF: 0.008, coolant: 'Inwendig 60 bar' },
+        H: { vc:  35, fF: 0.010, coolant: 'Inwendig 50 bar' }
+      }
+    },
+    {
+      id: 'KSEM-HPL',
+      name: 'HPL — Roestvrij staal / legeringen',
+      series: 'KSEM HPL',
+      description: 'Gespleten punt + trede-geometrie: 2 spanen per spaangroef, geen opbouwkant.',
+      features: ['RVS / ISO M', 'Gespleten punt', '2 spanen/groef', 'KC7320 AlTiN'],
+      imgSrc: 'images/kmt-ksem-hpl.jpg',
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="4" width="60" height="56" rx="3" fill="#fefce8" stroke="#ca8a04" stroke-width="1.5"/>
+        <line x1="10" y1="20" x2="70" y2="26" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="10" y1="36" x2="70" y2="42" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="10" y1="52" x2="70" y2="56" stroke="#fde68a" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Trede snijkant (KSEM HPL is iets groter dan KenTIP HPL) -->
+        <polyline points="10,60 24,70 24,77 40,86"
+                  stroke="#ca8a04" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="70,60 56,70 56,77 40,86"
+                  stroke="#ca8a04" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10,60 L24,70 L24,77 L40,86 L56,77 L56,70 L70,60 Z"
+              fill="#fefce8" stroke="#ca8a04" stroke-width="1.2"/>
+        <text x="40" y="95" text-anchor="middle" font-size="7.5" fill="#ca8a04" font-weight="bold">Trede 2× spaan</text>
+      </svg>`,
+      data: {
+        P: { vc:  72, fF: 0.017, coolant: 'Inwendig 40 bar' },
+        M: { vc:  68, fF: 0.016, coolant: 'Inwendig 50 bar' },
+        K: { vc:  78, fF: 0.022, coolant: 'Inwendig 30 bar' },
+        N: { vc: 165, fF: 0.025, coolant: 'Inwendig 30 bar' },
+        S: { vc:  30, fF: 0.011, coolant: 'Inwendig 60 bar' },
+        H: { vc:  36, fF: 0.010, coolant: 'Inwendig 60 bar' }
+      }
+    },
+    {
+      id: 'KSEM-SPL',
+      name: 'SPL — Hogetemperatuurlegeringen / non-ferro',
+      series: 'KSEM SPL',
+      description: '4-vlaks geometrie met 4 geleideranden voor lage snijkrachten. ISO S / ISO N.',
+      features: ['HTA / ISO S', 'Non-ferro / ISO N', '4-vlaks laagkracht', '4 geleideranden'],
+      imgSrc: 'images/kmt-ksem-spl.jpg',
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="4" width="60" height="56" rx="3" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+        <line x1="20" y1="4" x2="20" y2="60" stroke="#fdba74" stroke-width="1.2"/>
+        <line x1="31" y1="4" x2="31" y2="60" stroke="#fdba74" stroke-width="1.2"/>
+        <line x1="49" y1="4" x2="49" y2="60" stroke="#fdba74" stroke-width="1.2"/>
+        <line x1="60" y1="4" x2="60" y2="60" stroke="#fdba74" stroke-width="1.2"/>
+        <!-- 4-vlaks geometrie: 4 duidelijk segmenten in de punt -->
+        <line x1="10" y1="60" x2="22" y2="76" stroke="#c2410c" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="22" y1="76" x2="40" y2="84" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="40" y1="84" x2="58" y2="76" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="58" y1="76" x2="70" y2="60" stroke="#c2410c" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M10,60 L22,76 L40,84 L58,76 L70,60 Z" fill="#fff7ed" stroke="#c2410c" stroke-width="1.2"/>
+        <!-- Knikpunt markers -->
+        <circle cx="22" cy="76" r="2.5" fill="#c2410c"/>
+        <circle cx="58" cy="76" r="2.5" fill="#c2410c"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7.5" fill="#c2410c" font-weight="bold">4-vlaks laagkracht</text>
+      </svg>`,
+      data: {
+        P: { vc:  55, fF: 0.014, coolant: 'Inwendig 40 bar' },
+        M: { vc:  38, fF: 0.011, coolant: 'Inwendig 50 bar' },
+        K: { vc:  50, fF: 0.016, coolant: 'Inwendig 30 bar' },
+        N: { vc: 240, fF: 0.034, coolant: 'Inwendig 30 bar / MMS' },
+        S: { vc:  22, fF: 0.009, coolant: 'Inwendig 60 bar' },
+        H: { vc:  28, fF: 0.008, coolant: 'Inwendig 50 bar' }
+      }
+    }
+    ] // einde KSEM items
+  }
+
+  ] // einde drillCategories
+  ,
 
   // ── FREZEN (placeholder voor later) ─────────────────────────
   mills: [
@@ -957,10 +1172,30 @@ function selectBrand(brand, el) {
   document.getElementById('btn-step2').disabled = false;
 }
 
+// Zoek een boor op id (doorzoekt alle categorieën van een merk)
+function findDrill(brandId, drillId) {
+  const brand = BRAND_MAP[brandId];
+  if (!brand) return null;
+  for (const cat of brand.drillCategories) {
+    const found = cat.items.find(d => d.id === drillId);
+    if (found) return found;
+  }
+  return null;
+}
+
+// Rendert img + SVG-fallback voor een boor
+function drillVisual(drill) {
+  if (drill.imgSrc) {
+    return `<img class="drill-img" src="${drill.imgSrc}" alt="${drill.name}"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+            <div style="display:none">${drill.svg}</div>`;
+  }
+  return drill.svg;
+}
+
 // Build step 3 content based on op + brand
 function buildStep3() {
   const brand = BRAND_MAP[wiz.brand];
-  const items = wiz.op === 'drill' ? brand.drills : brand.mills;
   const title = document.getElementById('step3-title');
   const body  = document.getElementById('step3-body');
 
@@ -975,19 +1210,23 @@ function buildStep3() {
     return;
   }
 
-  title.textContent = 'Stap 3 — Kies boorpuntgeometrie (${brand.name})'.replace('${brand.name}', brand.name);
+  title.textContent = `Stap 3 — Kies boorpuntgeometrie (${brand.name})`;
 
+  // Toon elke categorie met header + kaartjes
   let html = '<div class="drill-grid">';
-  items.forEach(drill => {
-    html += `<div class="drill-card" data-id="${drill.id}" onclick="selectDrill('${drill.id}',this)">
-      ${drill.svg}
-      <div class="drill-name">${drill.name}</div>
-      <div class="drill-series">${drill.series}</div>
-      <div class="drill-features">`;
-    drill.features.forEach(f => { html += `<span class="feat-badge">${f}</span>`; });
-    html += `</div>
-      <div style="font-size:10px;color:var(--text2);margin-top:6px;line-height:1.4;">${drill.description}</div>
-    </div>`;
+  brand.drillCategories.forEach(cat => {
+    html += `<div class="drill-cat-hdr">${cat.name}</div>`;
+    cat.items.forEach(drill => {
+      html += `<div class="drill-card" data-id="${drill.id}" onclick="selectDrill('${drill.id}',this)">
+        ${drillVisual(drill)}
+        <div class="drill-name">${drill.name}</div>
+        <div class="drill-series">${drill.series}</div>
+        <div class="drill-features">`;
+      drill.features.forEach(f => { html += `<span class="feat-badge">${f}</span>`; });
+      html += `</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:6px;line-height:1.4;">${drill.description}</div>
+      </div>`;
+    });
   });
   html += '</div>';
   html += `<div class="btn-row">
@@ -1024,9 +1263,8 @@ function selectMat(mat, el) {
 }
 
 function showResults() {
-  const brand  = BRAND_MAP[wiz.brand];
-  const drills = brand.drills;
-  const drill  = drills.find(d => d.id === wiz.drillType);
+  const brand = BRAND_MAP[wiz.brand];
+  const drill = findDrill(wiz.brand, wiz.drillType);
   if (!drill || !wiz.diam) return;
 
   const matData = drill.data[wiz.mat];
