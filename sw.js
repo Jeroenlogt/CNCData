@@ -1,4 +1,4 @@
-const CACHE_NAME = 'CNC Data 0.03';
+const CACHE_NAME = 'CNC Data 0.06';
 const ASSETS = [
   '/',
   '/index.html',

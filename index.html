@@ -94,9 +94,26 @@
       padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;}
     .drill-card:hover{border-color:var(--accent2);background:var(--accent-lt);}
     .drill-card.selected{border-color:var(--accent);background:var(--accent-lt);}
-    .drill-svg{display:block;margin:0 auto 10px;width:80px;height:96px;}
+    .drill-svg{display:block;margin:0;width:80px;height:96px;}
     /* Echte productfoto — zelfde formaat als SVG */
-    .drill-img{display:block;margin:0 auto 10px;width:80px;height:96px;object-fit:contain;}
+    .drill-img{display:block;margin:0;width:80px;height:96px;object-fit:contain;}
+    /* Wrapper voor zoom-knop */
+    .drill-visual-wrap{position:relative;display:block;width:80px;height:96px;margin:0 auto 10px;}
+    .drill-zoom-btn{position:absolute;bottom:2px;right:2px;background:rgba(21,101,192,.75);color:#fff;
+      border:none;border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:13px;
+      display:flex;align-items:center;justify-content:center;padding:0;line-height:1;z-index:1;}
+    .drill-zoom-btn:hover{background:var(--accent);}
+    /* Modal voor uitvergrote boorvisualisatie */
+    .drill-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:900;
+      align-items:center;justify-content:center;}
+    .drill-modal-overlay.open{display:flex;}
+    .drill-modal-box{background:var(--surface);border-radius:14px;padding:24px 24px 18px;
+      max-width:90vw;display:flex;flex-direction:column;align-items:center;gap:14px;}
+    .drill-modal-box img,.drill-modal-box svg{width:200px;height:240px;object-fit:contain;}
+    .drill-modal-name{font-weight:700;font-size:15px;color:var(--text);text-align:center;}
+    .drill-modal-series{font-size:12px;color:var(--text2);text-align:center;}
+    .drill-modal-close{margin-top:4px;padding:8px 28px;background:var(--accent);color:#fff;
+      border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;}
     /* Categorie-header boven een groep boorpunten */
     .drill-cat-hdr{grid-column:1/-1;font-size:11px;font-weight:800;text-transform:uppercase;
       letter-spacing:.6px;color:var(--text3);padding:10px 4px 4px;
@@ -578,42 +595,29 @@
 <!-- ===== PAGE: INSTELLINGEN ===== -->
 <div class="page" id="page-settings">
   <div class="settings-group">
-    <div class="settings-group-title">Kennametal API</div>
-    <div class="settings-row">
-      <div>
-        <div class="settings-lbl">API Token</div>
-        <div class="settings-desc">BASIC token van apiportal.kennametal.com</div>
-      </div>
-      <input type="password" class="settings-input" id="apiKeyKmt" placeholder="token..." onchange="saveSettings()">
-    </div>
-    <div class="settings-row">
-      <div>
-        <div class="settings-lbl">Backend Proxy URL</div>
-        <div class="settings-desc">Voor live snijdata via eigen server</div>
-      </div>
-      <input type="url" class="settings-input" id="backendProxy" placeholder="https://..." onchange="saveSettings()">
-    </div>
-  </div>
-
-  <div class="settings-group">
-    <div class="settings-group-title">Sandvik / Walter / Gühring (binnenkort)</div>
-    <div class="settings-row">
-      <div>
-        <div class="settings-lbl">Sandvik CoroPlus</div>
-        <div class="settings-desc">Binnenkort beschikbaar</div>
-      </div>
-      <input type="password" class="settings-input" disabled placeholder="Binnenkort...">
-    </div>
-  </div>
-
-  <div class="settings-group">
     <div class="settings-group-title">Over</div>
     <div class="settings-row">
       <div>
-        <div class="settings-lbl">SnijData Pro v0.5</div>
+        <div class="settings-lbl">SnijData Pro v0.6</div>
         <div class="settings-desc">Wizard-gebaseerde snijgegevens voor CNC-verspaning</div>
       </div>
     </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-lbl">Databron</div>
+        <div class="settings-desc">Kennametal — KenTIP FS &amp; KSEM productcatalogus</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: uitvergrote boorvisualisatie ===== -->
+<div class="drill-modal-overlay" id="drillModal" onclick="closeDrillModal()">
+  <div class="drill-modal-box" onclick="event.stopPropagation()">
+    <div id="drillModalVisual"></div>
+    <div class="drill-modal-name" id="drillModalName"></div>
+    <div class="drill-modal-series" id="drillModalSeries"></div>
+    <button class="drill-modal-close" onclick="closeDrillModal()">Sluiten</button>
   </div>
 </div>
 
@@ -1195,14 +1199,41 @@ function findDrill(brandId, drillId) {
   return null;
 }
 
-// Rendert img + SVG-fallback voor een boor
+// Rendert img + SVG-fallback voor een boor, met zoom-knop rechtsonder
 function drillVisual(drill) {
+  const zoomBtn = `<button class="drill-zoom-btn" title="Vergroot"
+    onclick="event.stopPropagation();openDrillModal('${drill.id}')">&#128269;</button>`;
   if (drill.imgSrc) {
-    return `<img class="drill-img" src="${drill.imgSrc}" alt="${drill.name}"
-              onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-            <div style="display:none">${drill.svg}</div>`;
+    return `<div class="drill-visual-wrap">
+      <img class="drill-img" src="${drill.imgSrc}" alt="${drill.name}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <div style="display:none">${drill.svg}</div>
+      ${zoomBtn}
+    </div>`;
   }
-  return drill.svg;
+  return `<div class="drill-visual-wrap">${drill.svg}${zoomBtn}</div>`;
+}
+
+function openDrillModal(drillId) {
+  const drill = findDrill(wiz.brand, drillId);
+  if (!drill) return;
+  const vis = document.getElementById('drillModalVisual');
+  if (drill.imgSrc) {
+    vis.innerHTML = `<img src="${drill.imgSrc}" alt="${drill.name}"
+      onerror="this.src='';this.style.display='none';this.insertAdjacentHTML('afterend','${drill.svg.replace(/'/g,"\\'")}')"
+      style="width:200px;height:240px;object-fit:contain">`;
+  } else {
+    vis.innerHTML = drill.svg;
+    vis.querySelector('svg').setAttribute('width','200');
+    vis.querySelector('svg').setAttribute('height','240');
+  }
+  document.getElementById('drillModalName').textContent = drill.name;
+  document.getElementById('drillModalSeries').textContent = drill.series;
+  document.getElementById('drillModal').classList.add('open');
+}
+
+function closeDrillModal() {
+  document.getElementById('drillModal').classList.remove('open');
 }
 
 // Build step 3 content based on op + brand
@@ -1312,12 +1343,13 @@ function showResults() {
           <span class="coolant-val">${matData.coolant}</span>
         </div>
       </div>
-      ${drill.url ? `<div style="padding:10px 16px 14px;border-top:1px solid var(--border);text-align:center">
-        <a href="${drill.url}" target="_blank" rel="noopener"
-           style="font-size:13px;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:5px">
-          🔗 Bekijk ${drill.series} op kennametal.com
-        </a>
-      </div>` : ''}
+      ${drill.url ? `<a href="${drill.url}" target="_blank" rel="noopener"
+        style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;
+               border-top:1px solid var(--border);background:#f0f6ff;color:var(--accent);
+               text-decoration:none;font-size:13px;font-weight:600;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Bekijk ${drill.series} op kennametal.com
+      </a>` : ''}
     </div>`;
 
   document.getElementById('result-output').innerHTML = html;
@@ -1545,13 +1577,8 @@ function clearTri() {
 }
 
 // =============================================================
-//  SETTINGS
+//  SETTINGS  (API-tokens verwijderd — alle data is lokaal ingebouwd)
 // =============================================================
-function saveSettings() {
-  const hasKey = document.getElementById('apiKeyKmt').value;
-  document.getElementById('apiStatus').textContent = hasKey ? 'Live API' : 'Demo';
-  document.getElementById('apiStatus').className = 'badge-pill ' + (hasKey ? 'badge-ok' : 'badge-warn');
-}
 
 // =============================================================
 //  SERVICE WORKER
