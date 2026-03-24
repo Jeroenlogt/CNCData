@@ -598,7 +598,7 @@
     <div class="settings-group-title">Over</div>
     <div class="settings-row">
       <div>
-        <div class="settings-lbl">SnijData Pro v0.6</div>
+        <div class="settings-lbl">SnijData Pro v0.7</div>
         <div class="settings-desc">Wizard-gebaseerde snijgegevens voor CNC-verspaning</div>
       </div>
     </div>
@@ -607,6 +607,13 @@
         <div class="settings-lbl">Databron</div>
         <div class="settings-desc">Kennametal — KenTIP FS &amp; KSEM productcatalogus</div>
       </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-lbl">App herladen</div>
+        <div class="settings-desc">Wis cache en laad de nieuwste versie opnieuw</div>
+      </div>
+      <button onclick="hardReload()" style="padding:7px 14px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap;">↺ Herladen</button>
     </div>
   </div>
 </div>
@@ -668,7 +675,7 @@ const KENNAMETAL = {
       imgSrc: 'images/kmt-kentip-gtp.jpg',
       name: 'GTP — Universeel (GOdrill™)',
       series: 'KenTIP FS GTP',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system/kentip-fs-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system.html',
       description: 'GOdrill™ punt, uitstekend centreren, voor staal / RVS / gietijzer. Met doorstroomkoeling.',
       features: ['140° GOdrill™', 'Universeel', 'Doorstroomkoeling', 'KCK15A'],
       coolantThrough: true,
@@ -704,7 +711,7 @@ const KENNAMETAL = {
       imgSrc: 'images/kmt-kentip-hpg.jpg',
       name: 'HPG — Staal',
       series: 'KenTIP FS HPG',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system/kentip-fs-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system.html',
       description: 'HPG-punt voor staal. Uitstekend centreren, ook zonder voorcentreren in diepe gaten.',
       features: ['Staal geoptimaliseerd', 'Scherp centreren', 'AlTiN PVD', 'KCK15A'],
       coolantThrough: true,
@@ -742,7 +749,7 @@ const KENNAMETAL = {
       imgSrc: 'images/kmt-kentip-hpc.jpg',
       name: 'HPC — Gietijzer',
       series: 'KenTIP FS HPC',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system/kentip-fs-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system.html',
       description: 'HPC-punt voor alle gietijzersoorten. 4-geleideranden, grote hoekradius vermindert uittreedbraam.',
       features: ['Gietijzer', '4 geleideranden', 'Hoekradius', 'KC7410 AlCr PVD'],
       coolantThrough: true,
@@ -783,7 +790,7 @@ const KENNAMETAL = {
       imgSrc: 'images/kmt-kentip-hpl.jpg',
       name: 'HPL — Roestvrij staal (RVS)',
       series: 'KenTIP FS HPL',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system/kentip-fs-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system.html',
       description: 'HPL-punt voor RVS. Vormt 2 spanen per snijkant voor gelijkmatige spaanafvoer en geen opbouwkant.',
       features: ['RVS geoptimaliseerd', '2 spanen/snijkant', 'Gladde spaanstroom', 'AlTiN PVD'],
       coolantThrough: true,
@@ -827,7 +834,7 @@ const KENNAMETAL = {
       imgSrc: 'images/kmt-kentip-feg.jpg',
       name: 'FEG — Vlakke bodem (180°)',
       series: 'KenTIP FS FEG',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system/kentip-fs-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system.html',
       description: '180° vlakke-bodemgeometrie. Hoekafschuining vermindert braamvorming. 4 geleideranden voor rechtheid.',
       features: ['180° vlakke bodem', 'Hoekafschuining', '4 geleideranden', 'Ook als voorboor'],
       coolantThrough: true,
@@ -867,7 +874,7 @@ const KENNAMETAL = {
       imgSrc: 'images/kmt-kentip-spf.jpg',
       name: 'SPF — CFRP / Composiet',
       series: 'KenTIP FS SPF',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system/kentip-fs-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/kentip-fs-modular-drill-system.html',
       description: 'Dubbele hoekgeometrie 128°+90° voor CFRP. Diamantcoating, voorkomt delaminatie.',
       features: ['128°+90° dubbel', 'CFRP / composiet', 'Diamantcoating', 'Doorstroomkoeling'],
       coolantThrough: true,
@@ -918,7 +925,7 @@ const KENNAMETAL = {
       id: 'KSEM-HP',
       name: 'HP — Langspanend staal',
       series: 'KSEM HP',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system/ksem-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system.html',
       description: 'Gebogen snijkant voor optimale spaanvorming in langspanend staal.',
       features: ['Langspanend staal', 'Gebogen snijkant', 'KC7315 TiAlN'],
       imgSrc: 'images/kmt-ksem-hp.jpg',
@@ -948,7 +955,7 @@ const KENNAMETAL = {
       id: 'KSEM-HPG',
       name: 'HPG — Kortspanend / gelegeerd staal',
       series: 'KSEM HPG',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system/ksem-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system.html',
       description: 'Rechte snijkant, hoge stabiliteit bij kortspanend staal en onderbroken snedes.',
       features: ['Gelegeerd staal', 'Rechte snijkant', 'Onderbroken snede OK', 'KC7315'],
       imgSrc: 'images/kmt-ksem-hpg.jpg',
@@ -981,7 +988,7 @@ const KENNAMETAL = {
       id: 'KSEM-HPC',
       name: 'HPC — Gietijzer (grijs / laagsterk nodulair)',
       series: 'KSEM HPC',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system/ksem-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system.html',
       description: '4 geleideranden + grote hoekradius voorkomt uittreedbraam bij gietijzer.',
       features: ['Gietijzer ISO K', '4 geleideranden', 'Grote hoekradius', 'KC7410 AlCr PVD'],
       imgSrc: 'images/kmt-ksem-hpc.jpg',
@@ -1012,7 +1019,7 @@ const KENNAMETAL = {
       id: 'KSEM-HPCCL',
       name: 'HPCCL — Gietijzer (CGI / hoogsterk nodulair)',
       series: 'KSEM HPCCL',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system/ksem-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system.html',
       description: 'Hoekafschuining (geen radius) + 4 geleideranden voor zwaar gietijzer (CGI, ADI).',
       features: ['CGI / ADI gietijzer', 'Hoekafschuining', '4 geleideranden', 'KC7410'],
       imgSrc: 'images/kmt-ksem-hpccl.jpg',
@@ -1043,7 +1050,7 @@ const KENNAMETAL = {
       id: 'KSEM-HPL',
       name: 'HPL — Roestvrij staal / legeringen',
       series: 'KSEM HPL',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system/ksem-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system.html',
       description: 'Gespleten punt + trede-geometrie: 2 spanen per spaangroef, geen opbouwkant.',
       features: ['RVS / ISO M', 'Gespleten punt', '2 spanen/groef', 'KC7320 AlTiN'],
       imgSrc: 'images/kmt-ksem-hpl.jpg',
@@ -1074,7 +1081,7 @@ const KENNAMETAL = {
       id: 'KSEM-SPL',
       name: 'SPL — Hogetemperatuurlegeringen / non-ferro',
       series: 'KSEM SPL',
-      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system/ksem-carbide-inserts.html',
+      url: 'https://www.kennametal.com/us/en/products/metalworking-tools/holemaking/modular-drills/ksem-modular-drill-system.html',
       description: '4-vlaks geometrie met 4 geleideranden voor lage snijkrachten. ISO S / ISO N.',
       features: ['HTA / ISO S', 'Non-ferro / ISO N', '4-vlaks laagkracht', '4 geleideranden'],
       imgSrc: 'images/kmt-ksem-spl.jpg',
@@ -1585,6 +1592,18 @@ function clearTri() {
 // =============================================================
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+async function hardReload() {
+  if ('caches' in window) {
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+  }
+  if ('serviceWorker' in navigator) {
+    const regs = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(regs.map(r => r.unregister()));
+  }
+  location.reload(true);
 }
 </script>
 </body>
