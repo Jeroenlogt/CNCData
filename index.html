@@ -126,10 +126,12 @@
       font-weight:700;padding:2px 6px;border-radius:20px;}
 
     /* DIAMETER INPUT */
+    .param-lbl{font-size:12px;font-weight:700;color:var(--text2);display:block;margin-bottom:8px;}
     .diam-input{width:100%;font-size:28px;font-weight:700;text-align:center;
       border:2px solid var(--border);border-radius:var(--radius);padding:14px;
       outline:none;color:var(--text);background:var(--surface);}
     .diam-input:focus{border-color:var(--accent);}
+    .diam-input.sm{font-size:18px;padding:10px 8px;}
     .diam-presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
     .diam-preset{background:var(--surface);border:1px solid var(--border);border-radius:8px;
       padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;}
@@ -244,7 +246,7 @@
     <h1>CNC Data</h1>
     <div class="topbar-sub">CNC snijgegevens opzoeken</div>
   </div>
-  <span class="badge-pill badge-warn">v0.016</span>
+  <span class="badge-pill badge-warn">v0.017</span>
 </div>
 
 <!-- NAV -->
@@ -328,25 +330,25 @@
     <div class="card">
       <div class="card-head"><div class="card-title">Stap 2 — Kies fabrikant</div></div>
       <div class="card-body">
-        <div class="choice-grid">
+        <div class="choice-grid" id="brand-grid">
           <div class="choice-card" data-brand="kennametal" onclick="selectBrand('kennametal',this)">
             <span class="choice-icon">🇺🇸</span>
             <div class="choice-name">Kennametal</div>
-            <div class="choice-desc">Beyond™ VHM-serie</div>
+            <div class="choice-desc">KenTIP FS &amp; KSEM</div>
           </div>
-          <div class="choice-card" style="opacity:.45;cursor:default;" title="Binnenkort beschikbaar">
+          <div class="choice-card" data-brand="sandvik" onclick="selectBrand('sandvik',this)">
             <span class="choice-icon">🇸🇪</span>
             <div class="choice-name">Sandvik</div>
-            <div class="choice-desc">Binnenkort</div>
+            <div class="choice-desc">CoroMill serie</div>
           </div>
-          <div class="choice-card" style="opacity:.45;cursor:default;" title="Binnenkort beschikbaar">
+          <div class="choice-card" data-brand="iscar" onclick="selectBrand('iscar',this)">
+            <span class="choice-icon">🇮🇱</span>
+            <div class="choice-name">ISCAR</div>
+            <div class="choice-desc">HELIDO &amp; HELI</div>
+          </div>
+          <div class="choice-card" data-brand="walter" style="opacity:.45;cursor:default;" title="Binnenkort beschikbaar">
             <span class="choice-icon">🇩🇪</span>
             <div class="choice-name">Walter</div>
-            <div class="choice-desc">Binnenkort</div>
-          </div>
-          <div class="choice-card" style="opacity:.45;cursor:default;" title="Binnenkort beschikbaar">
-            <span class="choice-icon">🇩🇪</span>
-            <div class="choice-name">Gühring</div>
             <div class="choice-desc">Binnenkort</div>
           </div>
         </div>
@@ -370,32 +372,12 @@
     </div>
   </div>
 
-  <!-- STEP 4: Diameter -->
+  <!-- STEP 4: Diameter / Parameters (dynamisch ingevuld door buildStep4()) -->
   <div class="step-panel" id="step-4">
     <div class="card">
-      <div class="card-head"><div class="card-title">Stap 4 — Voer diameter in</div></div>
-      <div class="card-body">
-        <label style="font-size:12px;font-weight:700;color:var(--text2);display:block;margin-bottom:8px;">
-          Diameter (mm)
-        </label>
-        <input class="diam-input" type="number" id="diamInput" placeholder="bijv. 10.0"
-               min="0.5" max="50" step="0.5" oninput="onDiamInput()">
-        <div class="diam-presets">
-          <span class="diam-preset" onclick="setDiam(3)">3</span>
-          <span class="diam-preset" onclick="setDiam(4)">4</span>
-          <span class="diam-preset" onclick="setDiam(5)">5</span>
-          <span class="diam-preset" onclick="setDiam(6)">6</span>
-          <span class="diam-preset" onclick="setDiam(8)">8</span>
-          <span class="diam-preset" onclick="setDiam(10)">10</span>
-          <span class="diam-preset" onclick="setDiam(12)">12</span>
-          <span class="diam-preset" onclick="setDiam(16)">16</span>
-          <span class="diam-preset" onclick="setDiam(20)">20</span>
-          <span class="diam-preset" onclick="setDiam(25)">25</span>
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-secondary" onclick="goStep(3)">← Terug</button>
-          <button class="btn btn-primary" onclick="goStep(5)" id="btn-step4" disabled>Volgende →</button>
-        </div>
+      <div class="card-head"><div class="card-title" id="step4-title">Stap 4 — Voer diameter in</div></div>
+      <div class="card-body" id="step4-body">
+        <!-- Filled by buildStep4() -->
       </div>
     </div>
   </div>
@@ -433,7 +415,7 @@
         </div>
         <div class="btn-row">
           <button class="btn btn-secondary" onclick="goStep(4)">← Terug</button>
-          <button class="btn btn-primary btn-lg" onclick="showResults()">Bereken resultaten →</button>
+          <button class="btn btn-primary btn-lg" onclick="handleShowResults()">Bereken resultaten →</button>
         </div>
       </div>
     </div>
@@ -598,7 +580,7 @@
     <div class="settings-group-title">Over</div>
     <div class="settings-row">
       <div>
-        <div class="settings-lbl">CNC Data v0.016</div>
+        <div class="settings-lbl">CNC Data v0.017</div>
         <div class="settings-desc">Wizard-gebaseerde snijgegevens voor CNC-verspaning</div>
       </div>
     </div>
@@ -644,7 +626,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 // =============================================================
 //  WIZARD STATE
 // =============================================================
-let wiz = { step: 1, op: null, brand: null, drillType: null, diam: null, mat: 'P' };
+let wiz = { step: 1, op: null, brand: null, drillType: null, millType: null, diam: null, teeth: null, ap: null, ae: null, mat: 'P' };
 
 // =============================================================
 //  ██████████████████████████████████████████████████████████
@@ -1125,28 +1107,193 @@ const KENNAMETAL = {
 };
 
 // ────────────────────────────────────────────────────────────
-//  SANDVIK (placeholder — later uitwerken)
+//  SANDVIK COROMANT
 // ────────────────────────────────────────────────────────────
-// const SANDVIK = {
-//   name: 'Sandvik Coromant',
-//   drills: [ /* CoroDrill 860, Delta-C, etc. */ ],
-//   mills:  [ /* CoroMill serie */ ]
-// };
+const SANDVIK = {
+  name: 'Sandvik Coromant',
+  drillCategories: [],
+  millCategories: [
+  {
+    id: 'coromill-390',
+    name: 'CoroMill 390 — Hoekfrees 90°',
+    items: [
+    {
+      id: 'coromill390',
+      name: 'CoroMill 390',
+      series: 'CoroMill 390',
+      url: 'https://www.sandvik.coromant.com/en-gb/products/pages/productdetails.aspx?c=CoroMill%C2%AE%20390',
+      description: 'Universele 90° hoekfrees. Geschikt voor vlakfrezen, schouderfrezen en profileren in staal, RVS en gietijzer.',
+      features: ['90° instelhoek', 'Groot spaanvolume', 'Universeel', 'GC1130'],
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="4" width="36" height="48" rx="3" fill="#fde68a" stroke="#b45309" stroke-width="1.5"/>
+        <circle cx="40" cy="28" r="10" fill="none" stroke="#b45309" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="40" cy="28" r="3" fill="#b45309"/>
+        <rect x="10" y="52" width="60" height="10" rx="2" fill="#fbbf24" stroke="#b45309" stroke-width="1.2"/>
+        <polygon points="14,62 16,80 40,84 64,80 66,62" fill="#fde68a" stroke="#b45309" stroke-width="1.2"/>
+        <line x1="20" y1="62" x2="20" y2="80" stroke="#b45309" stroke-width="1.5"/>
+        <line x1="30" y1="62" x2="28" y2="81" stroke="#b45309" stroke-width="1.5"/>
+        <line x1="50" y1="62" x2="52" y2="81" stroke="#b45309" stroke-width="1.5"/>
+        <line x1="60" y1="62" x2="60" y2="80" stroke="#b45309" stroke-width="1.5"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7" fill="#b45309" font-weight="bold">390 — 90°</text>
+      </svg>`,
+      teethByDiam: {16:2, 20:2, 25:3, 32:3, 40:4, 50:5, 63:6, 80:8},
+      diamPresets: [16, 20, 25, 32, 40, 50, 63, 80],
+      inserts: [
+        { id:'R390-11T308M-MM', grade:'GC1130', material:'P/M/K', description:'Universeel voor staal, RVS en gietijzer', recommended:true },
+        { id:'R390-11T308M-PM', grade:'GC2220', material:'P',     description:'Hogere productiviteit in staal', recommended:false },
+        { id:'R390-11T308M-NL', grade:'GC1040', material:'N',     description:'Aluminium en non-ferro', recommended:false },
+      ],
+      data: {
+        P: { vc:200, fz:0.12, coolant:'Emulsie 6–8%',    insertGrade:'GC1130' },
+        M: { vc:150, fz:0.08, coolant:'Emulsie 8–10%',   insertGrade:'GC1130' },
+        K: { vc:220, fz:0.14, coolant:'Droog / MQL',     insertGrade:'GC1130' },
+        N: { vc:600, fz:0.18, coolant:'Droog / MQL',     insertGrade:'GC1040' },
+        S: { vc: 60, fz:0.06, coolant:'Emulsie 10%',     insertGrade:'GC1130' },
+        H: { vc:120, fz:0.08, coolant:'Droog',           insertGrade:'GC1130' },
+      }
+    }
+    ]
+  },
+  {
+    id: 'coromill-490',
+    name: 'CoroMill 490 — Ware 90° hoekfrees',
+    items: [
+    {
+      id: 'coromill490',
+      name: 'CoroMill 490',
+      series: 'CoroMill 490',
+      url: 'https://www.sandvik.coromant.com/en-gb/products/pages/productdetails.aspx?c=CoroMill%C2%AE%20490',
+      description: 'Ware 90° schouderhoekfrees met dubbele inserts. Hoge nauwkeurigheid bij schouderfrezen.',
+      features: ['Ware 90°', 'Dubbele insert', 'Hoge nauwkeurigheid', 'GC2220'],
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="4" width="36" height="48" rx="3" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+        <circle cx="40" cy="28" r="10" fill="none" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="40" cy="28" r="3" fill="#1e40af"/>
+        <rect x="10" y="52" width="60" height="10" rx="2" fill="#93c5fd" stroke="#1e40af" stroke-width="1.2"/>
+        <polygon points="14,62 16,80 40,84 64,80 66,62" fill="#dbeafe" stroke="#1e40af" stroke-width="1.2"/>
+        <line x1="20" y1="62" x2="20" y2="80" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="32" y1="62" x2="30" y2="81" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="48" y1="62" x2="50" y2="81" stroke="#1e40af" stroke-width="1.5"/>
+        <line x1="60" y1="62" x2="60" y2="80" stroke="#1e40af" stroke-width="1.5"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7" fill="#1e40af" font-weight="bold">490 — 90°</text>
+      </svg>`,
+      teethByDiam: {32:3, 40:4, 50:4, 63:5, 80:6, 100:8},
+      diamPresets: [32, 40, 50, 63, 80, 100],
+      inserts: [
+        { id:'490R-140408M-MM', grade:'GC2220', material:'P',   description:'Hoge snijsnelheid in staal', recommended:true },
+        { id:'490R-140408M-SM', grade:'GC1130', material:'P/M', description:'Universeel staal/RVS', recommended:false },
+      ],
+      data: {
+        P: { vc:230, fz:0.14, coolant:'Emulsie 6%',    insertGrade:'GC2220' },
+        M: { vc:160, fz:0.09, coolant:'Emulsie 8%',    insertGrade:'GC2220' },
+        K: { vc:250, fz:0.16, coolant:'Droog / MQL',   insertGrade:'GC2220' },
+        N: { vc:700, fz:0.20, coolant:'Droog / MQL',   insertGrade:'GC2220' },
+        S: { vc: 65, fz:0.07, coolant:'Emulsie 10%',   insertGrade:'GC2220' },
+        H: { vc:130, fz:0.09, coolant:'Droog',         insertGrade:'GC2220' },
+      }
+    }
+    ]
+  }
+  ]
+};
 
 // ────────────────────────────────────────────────────────────
-//  WALTER (placeholder — later uitwerken)
+//  ISCAR
 // ────────────────────────────────────────────────────────────
-// const WALTER = {
-//   name: 'Walter',
-//   drills: [ /* DC150, DC160, etc. */ ],
-//   mills:  [ /* M2131, etc. */ ]
-// };
+const ISCAR = {
+  name: 'ISCAR',
+  drillCategories: [],
+  millCategories: [
+  {
+    id: 'helido-845',
+    name: 'HELIDO 845 — 4-snijkant hoekfrees',
+    items: [
+    {
+      id: 'helido845',
+      name: 'HELIDO 845',
+      series: 'HELIDO 845',
+      url: 'https://www.iscar.com/eCatalog/Family.aspx?fnum=845',
+      description: '4-snijkant vierkante inserts voor 90° schouderfrezen. Kostenefficiënt door 4 bruikbare kanten.',
+      features: ['4 snijkanten', '90° schouder', 'Kostenefficiënt', 'IC830'],
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="4" width="36" height="48" rx="3" fill="#d1fae5" stroke="#065f46" stroke-width="1.5"/>
+        <circle cx="40" cy="28" r="10" fill="none" stroke="#065f46" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="40" cy="28" r="3" fill="#065f46"/>
+        <rect x="10" y="52" width="60" height="10" rx="2" fill="#6ee7b7" stroke="#065f46" stroke-width="1.2"/>
+        <polygon points="14,62 16,80 40,84 64,80 66,62" fill="#d1fae5" stroke="#065f46" stroke-width="1.2"/>
+        <line x1="18" y1="62" x2="18" y2="80" stroke="#065f46" stroke-width="1.5"/>
+        <line x1="29" y1="62" x2="27" y2="81" stroke="#065f46" stroke-width="1.5"/>
+        <line x1="40" y1="62" x2="40" y2="82" stroke="#065f46" stroke-width="1.5"/>
+        <line x1="51" y1="62" x2="53" y2="81" stroke="#065f46" stroke-width="1.5"/>
+        <line x1="62" y1="62" x2="62" y2="80" stroke="#065f46" stroke-width="1.5"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7" fill="#065f46" font-weight="bold">845 — 4-kant</text>
+      </svg>`,
+      teethByDiam: {20:2, 25:3, 32:3, 40:4, 50:5, 63:6, 80:7},
+      diamPresets: [20, 25, 32, 40, 50, 63, 80],
+      inserts: [
+        { id:'SDMT 13T3',  grade:'IC830',  material:'P/M/K', description:'Universeel voor staal, RVS en gietijzer', recommended:true },
+        { id:'SDMT 13T3',  grade:'IC807',  material:'M/S',   description:'RVS en superlegeringen', recommended:false },
+        { id:'SDMT 13T3',  grade:'IC20',   material:'N',     description:'Aluminium (ongecoat)', recommended:false },
+      ],
+      data: {
+        P: { vc:190, fz:0.15, coolant:'Emulsie 6%',    insertGrade:'IC830' },
+        M: { vc:140, fz:0.10, coolant:'Emulsie 8%',    insertGrade:'IC807' },
+        K: { vc:210, fz:0.17, coolant:'Droog / MQL',   insertGrade:'IC830' },
+        N: { vc:500, fz:0.20, coolant:'Droog / MQL',   insertGrade:'IC20'  },
+        S: { vc: 55, fz:0.07, coolant:'Emulsie 10%',   insertGrade:'IC807' },
+        H: { vc:110, fz:0.09, coolant:'Droog',         insertGrade:'IC830' },
+      }
+    }
+    ]
+  },
+  {
+    id: 'heli2000',
+    name: 'HELI 2000 — Hoge-voeding frees',
+    items: [
+    {
+      id: 'heli2000',
+      name: 'HELI 2000',
+      series: 'HELI 2000',
+      url: 'https://www.iscar.com/eCatalog/Family.aspx?fnum=2000',
+      description: 'Hoge-voeding frees (HFM) met kleine instelhoek. Maximale materiaalafname bij lage snijdiepte (ap ≤ 2 mm).',
+      features: ['Hoge voeding', 'ap ≤ 2 mm', 'Lage snijkrachten', 'IC908'],
+      svg: `<svg class="drill-svg" viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="4" width="36" height="48" rx="3" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.5"/>
+        <circle cx="40" cy="28" r="10" fill="none" stroke="#6d28d9" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <circle cx="40" cy="28" r="3" fill="#6d28d9"/>
+        <rect x="10" y="52" width="60" height="10" rx="2" fill="#c4b5fd" stroke="#6d28d9" stroke-width="1.2"/>
+        <polygon points="10,62 14,72 40,75 66,72 70,62" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.2"/>
+        <line x1="18" y1="62" x2="16" y2="72" stroke="#6d28d9" stroke-width="1.5"/>
+        <line x1="30" y1="62" x2="29" y2="73" stroke="#6d28d9" stroke-width="1.5"/>
+        <line x1="50" y1="62" x2="51" y2="73" stroke="#6d28d9" stroke-width="1.5"/>
+        <line x1="62" y1="62" x2="64" y2="72" stroke="#6d28d9" stroke-width="1.5"/>
+        <text x="40" y="93" text-anchor="middle" font-size="7" fill="#6d28d9" font-weight="bold">HFM — hoge voed.</text>
+      </svg>`,
+      teethByDiam: {20:2, 25:3, 32:3, 40:4, 50:5, 63:6, 80:8},
+      diamPresets: [20, 25, 32, 40, 50, 63, 80],
+      inserts: [
+        { id:'LNMU 0303ZER', grade:'IC908',  material:'P/M/K', description:'Universeel voor hoge-voeding frezen', recommended:true },
+        { id:'LNMU 0303ZER', grade:'IC520M', material:'M/S',   description:'RVS en superlegeringen', recommended:false },
+      ],
+      data: {
+        P: { vc:280, fz:0.30, coolant:'Emulsie 6%',    insertGrade:'IC908'  },
+        M: { vc:200, fz:0.20, coolant:'Emulsie 8%',    insertGrade:'IC908'  },
+        K: { vc:300, fz:0.32, coolant:'Droog / MQL',   insertGrade:'IC908'  },
+        N: { vc:700, fz:0.40, coolant:'Droog',         insertGrade:'IC908'  },
+        S: { vc: 80, fz:0.15, coolant:'Emulsie 10%',   insertGrade:'IC520M' },
+        H: { vc:180, fz:0.18, coolant:'Droog',         insertGrade:'IC908'  },
+      }
+    }
+    ]
+  }
+  ]
+};
 
 // ── MERK-LOOKUP MAP ─────────────────────────────────────────
 const BRAND_MAP = {
   kennametal: KENNAMETAL,
-  // sandvik: SANDVIK,
-  // walter:  WALTER,
+  sandvik: SANDVIK,
+  iscar: ISCAR,
 };
 
 // =============================================================
@@ -1158,12 +1305,31 @@ const MAT_NAMES = {
 };
 
 function goStep(n) {
+  if (n === 2) buildStep2();
   if (n === 3 && wiz.brand) buildStep3();
+  if (n === 4) buildStep4();
   document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('step-' + n).classList.add('active');
   wiz.step = n;
   updateProgress();
   document.getElementById('page-wizard').scrollTo({top:0, behavior:'smooth'});
+}
+
+function buildStep2() {
+  const forDrill = wiz.op === 'drill';
+  const drillBrands = ['kennametal'];
+  const millBrands  = ['sandvik', 'iscar'];
+  document.querySelectorAll('#brand-grid .choice-card').forEach(c => {
+    const b = c.dataset.brand;
+    if (!b) return;
+    const available = forDrill ? drillBrands.includes(b) : millBrands.includes(b);
+    c.style.opacity = available ? '1' : '0.45';
+    c.style.cursor  = available ? 'pointer' : 'default';
+    c.style.pointerEvents = available ? '' : 'none';
+    c.classList.remove('selected');
+  });
+  wiz.brand = null;
+  document.getElementById('btn-step2').disabled = true;
 }
 
 function updateProgress() {
@@ -1250,19 +1416,33 @@ function buildStep3() {
   const body  = document.getElementById('step3-body');
 
   if (wiz.op === 'mill') {
-    title.textContent = 'Stap 3 — Freestype';
-    body.innerHTML = `<div class="empty" style="padding:30px 10px">
-      <div class="empty-icon">🚧</div>
-      <div class="empty-title">Binnenkort beschikbaar</div>
-      <div class="empty-desc">Freesdata voor ${brand.name} wordt later toegevoegd.</div>
-    </div>
-    <div class="btn-row"><button class="btn btn-secondary" onclick="goStep(2)">← Terug</button></div>`;
+    title.textContent = `Stap 3 — Kies freestype (${brand.name})`;
+    let html = '<div class="drill-grid">';
+    brand.millCategories.forEach(cat => {
+      html += `<div class="drill-cat-hdr">${cat.name}</div>`;
+      cat.items.forEach(mill => {
+        html += `<div class="drill-card" data-id="${mill.id}" onclick="selectMill('${mill.id}',this)">
+          ${millVisual(mill)}
+          <div class="drill-name">${mill.name}</div>
+          <div class="drill-series">${mill.series}</div>
+          <div class="drill-features">`;
+        mill.features.forEach(f => { html += `<span class="feat-badge">${f}</span>`; });
+        html += `</div>
+          <div style="font-size:10px;color:var(--text2);margin-top:6px;line-height:1.4;">${mill.description}</div>
+        </div>`;
+      });
+    });
+    html += '</div>';
+    html += `<div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(2)">← Terug</button>
+      <button class="btn btn-primary" id="btn-step3" onclick="goStep(4)" disabled>Volgende →</button>
+    </div>`;
+    body.innerHTML = html;
     return;
   }
 
   title.textContent = `Stap 3 — Kies boorpuntgeometrie (${brand.name})`;
 
-  // Toon elke categorie met header + kaartjes
   let html = '<div class="drill-grid">';
   brand.drillCategories.forEach(cat => {
     html += `<div class="drill-cat-hdr">${cat.name}</div>`;
@@ -1292,6 +1472,142 @@ function selectDrill(id, el) {
   wiz.drillType = id;
   const btn = document.getElementById('btn-step3');
   if (btn) btn.disabled = false;
+}
+
+function selectMill(id, el) {
+  document.querySelectorAll('#step3-body .drill-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  wiz.millType = id;
+  const btn = document.getElementById('btn-step3');
+  if (btn) btn.disabled = false;
+}
+
+function findMill(brandId, millId) {
+  const brand = BRAND_MAP[brandId];
+  if (!brand) return null;
+  for (const cat of brand.millCategories) {
+    const found = cat.items.find(m => m.id === millId);
+    if (found) return found;
+  }
+  return null;
+}
+
+function millVisual(mill) {
+  return `<div class="drill-visual-wrap">${mill.svg}</div>`;
+}
+
+function buildStep4() {
+  const title = document.getElementById('step4-title');
+  const body  = document.getElementById('step4-body');
+
+  if (wiz.op === 'mill') {
+    const mill = findMill(wiz.brand, wiz.millType);
+    title.textContent = 'Stap 4 — Voer freesparameters in';
+    const presets = mill ? mill.diamPresets.map(d =>
+      `<span class="diam-preset" onclick="setMillDiam(${d})">${d}</span>`).join('') : '';
+    body.innerHTML = `
+      <label class="param-lbl">Diameter Dc (mm)</label>
+      <input class="diam-input" type="number" id="millDiamInput" placeholder="bijv. 32"
+             min="1" max="500" step="1" oninput="onMillDiamInput()">
+      <div class="diam-presets" id="millDiamPresets">${presets}</div>
+      <div id="millTeethSuggest" style="font-size:11px;color:var(--text2);margin-bottom:12px;min-height:16px;"></div>
+
+      <label class="param-lbl">Aantal tanden (z)</label>
+      <input class="diam-input" type="number" id="millTeethInput" placeholder="bijv. 4"
+             min="1" max="50" step="1" oninput="onMillTeethInput()">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+        <div>
+          <label class="param-lbl">Axiale diepte ap (mm)</label>
+          <input class="diam-input sm" type="number" id="millApInput" placeholder="bijv. 10"
+                 min="0.1" max="500" step="0.5" oninput="checkMillStep4()">
+        </div>
+        <div>
+          <label class="param-lbl">Radiale breedte ae (mm)</label>
+          <input class="diam-input sm" type="number" id="millAeInput" placeholder="bijv. 16"
+                 min="0.1" max="500" step="0.5" oninput="checkMillStep4()">
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-secondary" onclick="goStep(3)">← Terug</button>
+        <button class="btn btn-primary" onclick="goStep(5)" id="btn-step4" disabled>Volgende →</button>
+      </div>`;
+
+    // Restore previously entered values
+    if (wiz.diam)  { document.getElementById('millDiamInput').value  = wiz.diam;  }
+    if (wiz.teeth) { document.getElementById('millTeethInput').value = wiz.teeth; }
+    if (wiz.ap)    { document.getElementById('millApInput').value    = wiz.ap;    }
+    if (wiz.ae)    { document.getElementById('millAeInput').value    = wiz.ae;    }
+    checkMillStep4();
+    return;
+  }
+
+  title.textContent = 'Stap 4 — Voer diameter in';
+  body.innerHTML = `
+    <label class="param-lbl">Diameter (mm)</label>
+    <input class="diam-input" type="number" id="diamInput" placeholder="bijv. 10.0"
+           min="0.5" max="50" step="0.5" oninput="onDiamInput()">
+    <div class="diam-presets">
+      <span class="diam-preset" onclick="setDiam(3)">3</span>
+      <span class="diam-preset" onclick="setDiam(4)">4</span>
+      <span class="diam-preset" onclick="setDiam(5)">5</span>
+      <span class="diam-preset" onclick="setDiam(6)">6</span>
+      <span class="diam-preset" onclick="setDiam(8)">8</span>
+      <span class="diam-preset" onclick="setDiam(10)">10</span>
+      <span class="diam-preset" onclick="setDiam(12)">12</span>
+      <span class="diam-preset" onclick="setDiam(16)">16</span>
+      <span class="diam-preset" onclick="setDiam(20)">20</span>
+      <span class="diam-preset" onclick="setDiam(25)">25</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goStep(3)">← Terug</button>
+      <button class="btn btn-primary" onclick="goStep(5)" id="btn-step4" disabled>Volgende →</button>
+    </div>`;
+
+  if (wiz.diam) {
+    document.getElementById('diamInput').value = wiz.diam;
+    document.getElementById('btn-step4').disabled = false;
+  }
+}
+
+function setMillDiam(d) {
+  document.getElementById('millDiamInput').value = d;
+  wiz.diam = d;
+  updateTeethSuggest();
+  checkMillStep4();
+}
+
+function onMillDiamInput() {
+  const v = parseFloat(document.getElementById('millDiamInput').value);
+  wiz.diam = v > 0 ? v : null;
+  updateTeethSuggest();
+  checkMillStep4();
+}
+
+function updateTeethSuggest() {
+  const el = document.getElementById('millTeethSuggest');
+  if (!el) return;
+  const mill = findMill(wiz.brand, wiz.millType);
+  if (!mill || !wiz.diam) { el.textContent = ''; return; }
+  const suggested = mill.teethByDiam[wiz.diam];
+  el.textContent = suggested ? `Aanbevolen: ${suggested} tanden voor ⌀${wiz.diam} mm` : '';
+}
+
+function onMillTeethInput() {
+  const v = parseInt(document.getElementById('millTeethInput').value);
+  wiz.teeth = v > 0 ? v : null;
+  checkMillStep4();
+}
+
+function checkMillStep4() {
+  const ap = parseFloat((document.getElementById('millApInput') || {}).value);
+  const ae = parseFloat((document.getElementById('millAeInput') || {}).value);
+  wiz.ap = ap > 0 ? ap : null;
+  wiz.ae = ae > 0 ? ae : null;
+  const ok = wiz.diam && wiz.teeth && wiz.ap && wiz.ae;
+  const btn = document.getElementById('btn-step4');
+  if (btn) btn.disabled = !ok;
 }
 
 function setDiam(d) {
@@ -1361,12 +1677,84 @@ function showResults() {
 
   document.getElementById('result-output').innerHTML = html;
   goStep(6);
-  addToHistory(drill, wiz.diam, wiz.mat, n, vf);
+  addToHistory({ op:'drill', tool:drill, diam:wiz.diam, mat:wiz.mat, n, vf });
+}
+
+function handleShowResults() {
+  if (wiz.op === 'mill') showMillResults();
+  else showResults();
+}
+
+function showMillResults() {
+  const brand = BRAND_MAP[wiz.brand];
+  const mill  = findMill(wiz.brand, wiz.millType);
+  if (!mill || !wiz.diam || !wiz.teeth) return;
+
+  const matData = mill.data[wiz.mat];
+  const n  = Math.round((matData.vc * 1000) / (Math.PI * wiz.diam));
+  const vf = Math.round(n * matData.fz * wiz.teeth);
+
+  const recInsert = mill.inserts.find(ins => ins.grade === matData.insertGrade) || mill.inserts[0];
+
+  const srcDomain = brand.name === 'Sandvik Coromant' ? 'sandvik.coromant.com' : 'iscar.com';
+
+  const html = `
+    <div class="card" style="overflow:hidden">
+      <div class="result-header">
+        <div class="result-tool-name">${mill.name}</div>
+        <div class="result-info">${brand.name} ${mill.series} · ⌀${wiz.diam} mm · z=${wiz.teeth} · ${MAT_NAMES[wiz.mat]}</div>
+      </div>
+      <div class="result-body">
+        <div class="data-row">
+          <span class="data-lbl">Snijsnelheid (Vc)</span>
+          <span class="data-val">${matData.vc} <span class="data-unit">m/min</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Voeding p. tand (fz)</span>
+          <span class="data-val">${matData.fz} <span class="data-unit">mm/tand</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Toerental (n)</span>
+          <span class="data-val highlight-val">${n.toLocaleString('nl-NL')} <span class="data-unit">omw/min</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Tafelvoeding (Vf)</span>
+          <span class="data-val highlight-val">${vf.toLocaleString('nl-NL')} <span class="data-unit">mm/min</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Axiale diepte (ap)</span>
+          <span class="data-val">${wiz.ap} <span class="data-unit">mm</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Radiale breedte (ae)</span>
+          <span class="data-val">${wiz.ae} <span class="data-unit">mm</span></span>
+        </div>
+        <div class="data-row">
+          <span class="data-lbl">Koeling</span>
+          <span class="coolant-val">${matData.coolant}</span>
+        </div>
+      </div>
+      ${recInsert ? `<div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--surface);">
+        <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">AANBEVOLEN WISSELPLAAT</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);">${recInsert.grade}</div>
+        <div style="font-size:12px;color:var(--text2);">${recInsert.id} — ${recInsert.description}</div>
+      </div>` : ''}
+      ${mill.url ? `<a href="${mill.url}" target="_blank" rel="noopener"
+        style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;
+               border-top:1px solid var(--border);background:#f0f6ff;color:var(--accent);
+               text-decoration:none;font-size:13px;font-weight:600;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Bekijk ${mill.series} op ${srcDomain}
+      </a>` : ''}
+    </div>`;
+
+  document.getElementById('result-output').innerHTML = html;
+  goStep(6);
+  addToHistory({ op:'mill', tool:mill, brand:wiz.brand, diam:wiz.diam, teeth:wiz.teeth, ap:wiz.ap, ae:wiz.ae, mat:wiz.mat, n, vf });
 }
 
 function resetWizard() {
-  wiz = { step:1, op:null, brand:null, drillType:null, diam:null, mat:'P' };
-  document.getElementById('diamInput').value = '';
+  wiz = { step:1, op:null, brand:null, drillType:null, millType:null, diam:null, teeth:null, ap:null, ae:null, mat:'P' };
   document.querySelectorAll('.mat-btn').forEach(b => b.classList.remove('selected'));
   document.querySelector('[data-mat="P"]').classList.add('selected');
   document.getElementById('btn-step1').disabled = true;
@@ -1379,8 +1767,8 @@ function resetWizard() {
 // =============================================================
 let history = [];
 
-function addToHistory(drill, diam, mat, n, vf) {
-  history.unshift({ drill, diam, mat, n, vf, t: new Date().toLocaleString('nl-NL') });
+function addToHistory(entry) {
+  history.unshift({ ...entry, t: new Date().toLocaleString('nl-NL') });
   if (history.length > 30) history.pop();
   renderHistory();
 }
@@ -1388,18 +1776,39 @@ function addToHistory(drill, diam, mat, n, vf) {
 function renderHistory() {
   const el = document.getElementById('historyList');
   if (!history.length) return;
-  el.innerHTML = history.map((h,i) => `
-    <div class="hist-item" onclick="reloadFromHistory(${i})">
-      <div class="hist-title">${h.drill.name} · ⌀${h.diam} mm</div>
+  el.innerHTML = history.map((h,i) => {
+    if (h.op === 'mill') {
+      return `<div class="hist-item" onclick="reloadFromHistory(${i})">
+        <div class="hist-title">⚙️ ${h.tool.name} · ⌀${h.diam} mm · z=${h.teeth}</div>
+        <div class="hist-sub">${MAT_NAMES[h.mat]} · n=${h.n.toLocaleString('nl-NL')} omw/min · Vf=${h.vf.toLocaleString('nl-NL')} mm/min · ${h.t}</div>
+      </div>`;
+    }
+    return `<div class="hist-item" onclick="reloadFromHistory(${i})">
+      <div class="hist-title">🔩 ${h.tool.name} · ⌀${h.diam} mm</div>
       <div class="hist-sub">${MAT_NAMES[h.mat]} · n=${h.n.toLocaleString('nl-NL')} omw/min · Vf=${h.vf.toLocaleString('nl-NL')} mm/min · ${h.t}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function reloadFromHistory(i) {
   const h = history[i];
-  wiz.mat = h.mat;
-  document.querySelector('[data-mat="' + h.mat + '"]').click();
-  showResults();
+  wiz.op    = h.op;
+  wiz.brand = h.brand || wiz.brand;
+  wiz.mat   = h.mat;
+  if (h.op === 'mill') {
+    wiz.millType = h.tool.id;
+    wiz.diam     = h.diam;
+    wiz.teeth    = h.teeth;
+    wiz.ap       = h.ap;
+    wiz.ae       = h.ae;
+    document.querySelector('[data-mat="' + h.mat + '"]').click();
+    showMillResults();
+  } else {
+    wiz.drillType = h.tool.id;
+    wiz.diam      = h.diam;
+    document.querySelector('[data-mat="' + h.mat + '"]').click();
+    showResults();
+  }
   document.querySelectorAll('.nav-btn')[0].click();
 }
 
